@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Raja Sifir Cilik - Hafal & Kuiz</title>
+    <title>Raja Sifir Cilik - Edisi BoBoiBoy</title>
 
     <!-- Meta Tag PWA & Tema -->
     <meta name="theme-color" content="#ff9f43">
@@ -69,7 +69,7 @@
         .app-container {
             width: 100%;
             max-width: 920px;
-            min-height: 700px;
+            min-height: 720px;
             background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(10px);
             border-radius: 32px;
@@ -85,7 +85,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 24px;
+            padding: 14px 20px;
             background: #ffffff;
             border-bottom: 4px solid #f0f3f8;
             flex-wrap: wrap;
@@ -97,7 +97,7 @@
             align-items: center;
             gap: 10px;
             background: linear-gradient(45deg, #ffeaa7, #fdcb6e);
-            padding: 8px 18px;
+            padding: 6px 16px;
             border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
@@ -105,8 +105,13 @@
             transition: transform 0.2s;
         }
 
-        .user-pill:hover {
-            transform: scale(1.03);
+        .user-avatar-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            background: #fff;
         }
 
         .nav-menu {
@@ -197,6 +202,12 @@
             color: #15803d;
         }
 
+        .stars-display-tag {
+            font-size: 14px;
+            color: #f1c40f;
+            margin-top: 4px;
+        }
+
         /* Hafalan Page */
         .hafalan-box {
             background: white;
@@ -228,17 +239,43 @@
             color: #f1c40f;
         }
 
-        /* Quiz Page */
+        /* Quiz Page & Character Companion */
+        .character-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            padding: 10px 18px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .character-box img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .character-speech {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
         .quiz-card {
             background: white;
             border: 4px solid var(--primary-orange);
             border-radius: 32px;
             width: 100%;
             max-width: 500px;
-            padding: 35px 20px;
+            padding: 30px 20px;
             text-align: center;
             box-shadow: 0 15px 30px rgba(255, 159, 67, 0.2);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+            position: relative;
         }
 
         .question-text { font-size: 52px; font-weight: 700; color: #1e293b; }
@@ -266,6 +303,29 @@
 
         .option-btn.correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #15803d !important; }
         .option-btn.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+
+        .btn-powerup {
+            background: linear-gradient(45deg, #ec4899, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-powerup:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #cbd5e1;
+            box-shadow: none;
+        }
 
         /* Dashboard & Badges */
         .progress-bar-overall {
@@ -328,10 +388,10 @@
             position: relative;
         }
 
-        .sijil-title { font-family: var(--font-title); font-size: 32px; color: #d97706; margin-bottom: 10px; }
+        .sijil-title { font-family: var(--font-title); font-size: 30px; color: #d97706; margin-bottom: 10px; }
         .sijil-name { font-size: 36px; font-weight: 700; color: #1e293b; border-bottom: 2px solid #cbd5e1; display: inline-block; padding: 0 20px; margin: 15px 0; }
 
-        /* Modal & User List Styles */
+        /* Modal Styles */
         .modal-overlay {
             position: fixed; top:0; left:0; right:0; bottom:0;
             background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
@@ -341,12 +401,37 @@
             background: white; border-radius: 32px; padding: 28px; width: 100%; max-width: 440px; text-align: center; max-height: 90vh; overflow-y: auto;
         }
 
+        .avatar-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            cursor: pointer;
+            object-fit: cover;
+            padding: 4px;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary-orange);
+            background: #ffedd5;
+            transform: scale(1.1);
+        }
+
         .user-list-container {
             margin: 15px 0;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 200px;
+            max-height: 180px;
             overflow-y: auto;
         }
 
@@ -356,15 +441,9 @@
             align-items: center;
             background: #f8fafc;
             border: 2px solid #e2e8f0;
-            padding: 10px 16px;
+            padding: 8px 14px;
             border-radius: 16px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .user-item-row:hover {
-            border-color: var(--primary-orange);
-            background: #fff8f0;
         }
 
         .user-item-row.active {
@@ -373,22 +452,16 @@
             font-weight: 700;
         }
 
-        .btn-delete-user {
-            color: #ef4444;
-            background: none;
-            border: none;
-            padding: 6px 10px;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 8px;
+        .btn-reset-user-data {
+            color: #d97706; background: #fef3c7; border: 1px solid #fde68a; padding: 4px 8px; font-size: 12px; font-weight:700; cursor: pointer; border-radius: 8px;
         }
 
-        .btn-delete-user:hover {
-            background: #fee2e2;
+        .btn-delete-user {
+            color: #ef4444; background: none; border: none; padding: 4px 8px; font-size: 14px; cursor: pointer;
         }
 
         .input-custom {
-            width: 100%; padding: 12px 16px; border-radius: 16px; border: 2px solid #cbd5e1; font-size: 16px; text-align: center; margin: 10px 0; outline: none;
+            width: 100%; padding: 12px 16px; border-radius: 16px; border: 2px solid #cbd5e1; font-size: 16px; text-align: center; margin: 8px 0; outline: none;
         }
 
         .btn-action {
@@ -396,13 +469,13 @@
         }
 
         .btn-reset-all {
-            background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 10px; border-radius: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 15px; font-size: 13px;
+            background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 8px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 12px; font-size: 12px;
         }
 
         @media (max-width: 600px) {
             .question-text { font-size: 38px; }
             .option-btn { font-size: 24px; padding: 12px; }
-            .sijil-title { font-size: 24px; }
+            .sijil-title { font-size: 22px; }
             .sijil-name { font-size: 26px; }
         }
     </style>
@@ -413,9 +486,9 @@
     <!-- Header Bar -->
     <div class="header-bar">
         <div class="user-pill" onclick="openUserModal()">
-            <i class="fa-solid fa-crown" style="color: #d97706;"></i>
+            <img src="boboiboy.png" id="headerAvatarImg" class="user-avatar-img" alt="Avatar" onerror="this.src='boboiboy.png'">
             <span id="currentUserName">Danial</span>
-            <i class="fa-solid fa-chevron-down" style="font-size: 12px; margin-left: 4px; opacity: 0.6;"></i>
+            <i class="fa-solid fa-chevron-down" style="font-size: 12px; margin-left: 2px; opacity: 0.6;"></i>
         </div>
 
         <div class="nav-menu">
@@ -472,19 +545,31 @@
         <!-- VIEW 2: KUIZ MENU -->
         <div id="viewKuizMenu" class="hidden" style="width:100%; text-align:center;">
             <h1 style="font-family: var(--font-title); color: #d97706;">Cabaran Kuiz Sifir 🎯</h1>
-            <p style="color: #64748b;">Jawab 12 soalan rawak ($1\times$ hingga $12\times$) untuk kumpul lencana!</p>
+            <p style="color: #64748b;">Jawab 12 soalan rawak (1x hingga 12x) untuk kumpul bintang & lencana adiwira!</p>
             <div class="grid-container" id="kuizGrid"></div>
         </div>
 
         <!-- VIEW KUIZ PLAY -->
         <div id="viewKuizPlay" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-            <div style="width: 100%; max-width: 500px; display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 700;">
+            
+            <!-- Character Speech Box -->
+            <div class="character-box">
+                <img src="boboiboy.png" id="quizCharImg" alt="Character" onerror="this.src='boboiboy.png'">
+                <div>
+                    <div class="character-speech" id="quizCharSpeech">"Teruskan usaha! Kebenaran menyebelahi kamu!"</div>
+                    <button class="btn-powerup" id="btnPowerupYaya" onclick="useYayaBiskutPower()">
+                        🍪 Kuasa Biskut Yaya (50/50)
+                    </button>
+                </div>
+            </div>
+
+            <div style="width: 100%; max-width: 500px; display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700;">
                 <span id="quizProgressText" style="color: #3b82f6;">Soalan 1/12</span>
                 <span id="quizScoreText" style="color: #2ecc71;">Markah: 0</span>
             </div>
 
             <div class="quiz-card">
-                <div class="question-text" id="questionDisplay">2 × 3 = ?</div>
+                <div class="question-text" id="questionDisplay">3 × 2 = ?</div>
             </div>
 
             <div class="answers-grid" id="answersGrid"></div>
@@ -493,9 +578,10 @@
         <!-- VIEW KUIZ RESULT -->
         <div id="viewKuizResult" class="hidden" style="width:100%; text-align:center;">
             <div class="modal-card" style="max-width: 450px; margin: 0 auto;">
-                <h2 style="font-size: 28px; color: var(--primary-orange);">Keputusan Kuiz!</h2>
-                <div style="font-size: 50px; color: #f1c40f; margin: 15px 0;" id="resultStarsDisplay">⭐⭐⭐</div>
-                <p style="font-size: 20px; color: #475569;" id="resultScoreText">Anda menjawab 12/12 betul!</p>
+                <img src="papazola.png" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px;" onerror="this.src='boboiboy.png'">
+                <h2 style="font-size: 26px; color: var(--primary-orange);">Kebenaran Menyebelahi Kamu!</h2>
+                <div style="font-size: 45px; color: #f1c40f; margin: 10px 0;" id="resultStarsDisplay">⭐⭐⭐</div>
+                <p style="font-size: 18px; color: #475569;" id="resultScoreText">Anda menjawab 12/12 betul!</p>
                 <p style="font-size: 15px; color: #16a34a; font-weight: 700; margin: 15px 0;" id="badgeUnlockedText"></p>
 
                 <button class="btn-action" onclick="switchTab('kuiz')">Selesai & Kembali</button>
@@ -518,7 +604,7 @@
                 </button>
             </div>
 
-            <h3 style="margin-bottom: 12px; color: #334155;">Koleksi Lencana Terkumpul</h3>
+            <h3 style="margin-bottom: 12px; color: #334155;">Koleksi Lencana Adiwira</h3>
             <div class="badges-grid" id="badgesContainer" style="margin-bottom: 24px;"></div>
 
             <h3 style="margin-bottom: 12px; color: #334155;">Carta Kedudukan Pemain</h3>
@@ -528,7 +614,7 @@
         <!-- VIEW 4: SIJIL -->
         <div id="viewSijil" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
             <div class="sijil-container">
-                <div style="font-size: 50px; margin-bottom: 10px;">👑</div>
+                <div style="font-size: 50px; margin-bottom: 10px;">⚡</div>
                 <div class="sijil-title">SIJIL PENGUKURAN RAJA SIFIR CILIK</div>
                 <p style="color: #64748b;">Dengan ini diperakui bahawa</p>
                 <div class="sijil-name" id="sijilUserName">Danial</div>
@@ -539,7 +625,7 @@
                         <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Tarikh Sah</p>
                     </div>
                     <div>
-                        <div style="font-size: 24px; color: #d97706;">🏆</div>
+                        <div style="font-size: 24px; color: #d97706;">⚡</div>
                         <p style="font-size: 12px; font-weight: 700; color: #d97706;">Raja Sifir Cilik</p>
                     </div>
                 </div>
@@ -554,16 +640,24 @@
     </div>
 </div>
 
-<!-- Modal User Switcher & Manager -->
+<!-- Modal User Switcher & Avatar Selector -->
 <div class="modal-overlay hidden" id="userModal">
     <div class="modal-card">
-        <h2 style="color: #1e293b; margin-bottom: 4px;">Pilih Pemain</h2>
-        <p style="color: #64748b; font-size: 13px;">Pilih nama anak atau tambah pemain baharu:</p>
+        <h2 style="color: #1e293b; margin-bottom: 4px;">Pilih Pemain & Avatar</h2>
+        <p style="color: #64748b; font-size: 13px;">Pilih watak & nama anda:</p>
+
+        <!-- Avatar Selection -->
+        <div class="avatar-selector">
+            <img src="boboiboy.png" class="avatar-option selected" id="av_boboiboy" onclick="selectAvatarChoice('boboiboy.png')" alt="BoBoiBoy" onerror="this.src='boboiboy.png'">
+            <img src="yaya.png" class="avatar-option" id="av_yaya" onclick="selectAvatarChoice('yaya.png')" alt="Yaya" onerror="this.src='boboiboy.png'">
+            <img src="gopal.png" class="avatar-option" id="av_gopal" onclick="selectAvatarChoice('gopal.png')" alt="Gopal" onerror="this.src='boboiboy.png'">
+            <img src="papazola.png" class="avatar-option" id="av_papazola" onclick="selectAvatarChoice('papazola.png')" alt="Papa Zola" onerror="this.src='boboiboy.png'">
+        </div>
         
         <!-- Senarai Pemain Sedia Ada -->
         <div class="user-list-container" id="userListContainer"></div>
 
-        <hr style="margin: 12px 0; border: none; border-top: 1px dashed #e2e8f0;">
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed #e2e8f0;">
 
         <!-- Tambah Pemain Baharu -->
         <p style="font-size: 13px; font-weight: 700; color: #475569; text-align: left;">+ Tambah Pemain Baharu:</p>
@@ -574,9 +668,8 @@
             <button class="btn-nav" onclick="closeUserModal()" style="padding: 12px;">Batal</button>
         </div>
 
-        <!-- Reset Keseluruhan -->
         <button class="btn-reset-all" onclick="confirmResetAllData()">
-            🗑️ Padam SEMUA Nama & Data
+            🗑️ Padam SEMUA Nama & Data Keseluruhan
         </button>
     </div>
 </div>
@@ -584,25 +677,34 @@
 <script>
 /* BADGES DEFINITION (Total 100 Pts) */
 const BADGES = [
-    { id: 'b_s2', title: 'Wira Sifir 2', pts: 8, desc: 'Selesai Kuiz Sifir 2 (Sempurna)', icon: '✌️' },
-    { id: 'b_s3', title: 'Pakar Sifir 3', pts: 8, desc: 'Selesai Kuiz Sifir 3 (Sempurna)', icon: '☘️' },
-    { id: 'b_s4', title: 'Juara Sifir 4', pts: 8, desc: 'Selesai Kuiz Sifir 4 (Sempurna)', icon: '🍀' },
-    { id: 'b_s5', title: 'Pahlawan Sifir 5', pts: 8, desc: 'Selesai Kuiz Sifir 5 (Sempurna)', icon: '🖐️' },
-    { id: 'b_s6', title: 'Tangkas Sifir 6', pts: 9, desc: 'Selesai Kuiz Sifir 6 (Sempurna)', icon: '🎲' },
-    { id: 'b_s7', title: 'Penjelajah Sifir 7', pts: 9, desc: 'Selesai Kuiz Sifir 7 (Sempurna)', icon: '🌈' },
-    { id: 'b_s8', title: 'Hebat Sifir 8', pts: 9, desc: 'Selesai Kuiz Sifir 8 (Sempurna)', icon: '🐙' },
-    { id: 'b_s9', title: 'Bintang Sifir 9', pts: 10, desc: 'Selesai Kuiz Sifir 9 (Sempurna)', icon: '🌟' },
-    { id: 'b_s10', title: 'Raja Sifir 10', pts: 8, desc: 'Selesai Kuiz Sifir 10 (Sempurna)', icon: '🔟' },
-    { id: 'b_s11', title: 'Master Sifir 11', pts: 11, desc: 'Selesai Kuiz Sifir 11 (Sempurna)', icon: '🚀' },
-    { id: 'b_s12', title: 'Legenda Sifir 12', pts: 12, desc: 'Selesai Kuiz Sifir 12 (Sempurna)', icon: '👑' },
+    { id: 'b_s2', title: 'Wira Kebenaran Sifir 2', pts: 8, desc: 'Sifir 2 (Sekurang-kurangnya 2 Bintang)', icon: '⚡' },
+    { id: 'b_s3', title: 'Pakar Biskut Sifir 3', pts: 8, desc: 'Sifir 3 (Sekurang-kurangnya 2 Bintang)', icon: '🍪' },
+    { id: 'b_s4', title: 'Juara Makanan Sifir 4', pts: 8, desc: 'Sifir 4 (Sekurang-kurangnya 2 Bintang)', icon: '🍭' },
+    { id: 'b_s5', title: 'BoBoiBoy Elemental 5', pts: 8, desc: 'Sifir 5 (Sekurang-kurangnya 2 Bintang)', icon: '🔥' },
+    { id: 'b_s6', title: 'Tangkas Kebenaran 6', pts: 9, desc: 'Sifir 6 (Sekurang-kurangnya 2 Bintang)', icon: '🥋' },
+    { id: 'b_s7', title: 'Penjelajah Galaksi 7', pts: 9, desc: 'Sifir 7 (Sekurang-kurangnya 2 Bintang)', icon: '🚀' },
+    { id: 'b_s8', title: 'BoBoiBoy Halilintar 8', pts: 9, desc: 'Sifir 8 (Sekurang-kurangnya 2 Bintang)', icon: '⚡' },
+    { id: 'b_s9', title: 'Bintang Terang 9', pts: 10, desc: 'Sifir 9 (Sekurang-kurangnya 2 Bintang)', icon: '🌟' },
+    { id: 'b_s10', title: 'Raja Kebenaran 10', pts: 8, desc: 'Sifir 10 (Sekurang-kurangnya 2 Bintang)', icon: '🔟' },
+    { id: 'b_s11', title: 'Master Elemental 11', pts: 11, desc: 'Sifir 11 (Sekurang-kurangnya 2 Bintang)', icon: '🌀' },
+    { id: 'b_s12', title: 'Legenda Sifir 12', pts: 12, desc: 'Sifir 12 (Sekurang-kurangnya 2 Bintang)', icon: '👑' },
 ];
 const MAX_TOTAL_POINTS = BADGES.reduce((acc, b) => acc + b.pts, 0);
 
+const SPEECHES = [
+    '"Kebenaran menyebelahi kamu!" - Papa Zola',
+    '"Biskut Yaya beri kamu tenaga!" - Yaya',
+    '"Tukar soalan ni jadi gula-gula!" - Gopal',
+    '"BoBoiBoy Kuasa Tiga!" - BoBoiBoy',
+    '"Fokus! Kebenaran tak pernah menyerah!" - Papa Zola'
+];
+
 /* APP STATE */
 let currentUser = "";
+let selectedAvatarFile = "boboiboy.png";
 let usersData = {};
 let activeHafalanNum = 2;
-let activeQuiz = { num: 2, questions: [], index: 0, score: 0 };
+let activeQuiz = { num: 2, questions: [], index: 0, score: 0, usedPowerup: false };
 
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
@@ -616,11 +718,11 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function loadData() {
-    const saved = localStorage.getItem('raja_sifir_v3_data');
+    const saved = localStorage.getItem('raja_sifir_v4_data');
     if (saved) {
         try { usersData = JSON.parse(saved); } catch(e) { usersData = {}; }
     }
-    const last = localStorage.getItem('raja_sifir_v3_lastuser');
+    const last = localStorage.getItem('raja_sifir_v4_lastuser');
     if (last && usersData[last]) {
         currentUser = last;
     } else if (Object.keys(usersData).length > 0) {
@@ -630,14 +732,30 @@ function loadData() {
 }
 
 function saveData() {
-    localStorage.setItem('raja_sifir_v3_data', JSON.stringify(usersData));
-    if (currentUser) localStorage.setItem('raja_sifir_v3_lastuser', currentUser);
+    localStorage.setItem('raja_sifir_v4_data', JSON.stringify(usersData));
+    if (currentUser) localStorage.setItem('raja_sifir_v4_lastuser', currentUser);
 }
 
 function ensureUserData(name) {
     if (!name) return;
     if (!usersData[name]) {
-        usersData[name] = { selfRate: {}, parentTick: {}, badges: [] };
+        usersData[name] = { avatar: 'boboiboy.png', selfRate: {}, parentTick: {}, quizStars: {}, badges: [] };
+    }
+    if (!usersData[name].quizStars) usersData[name].quizStars = {};
+}
+
+function selectAvatarChoice(file) {
+    selectedAvatarFile = file;
+    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+    if(file.includes('boboiboy')) document.getElementById('av_boboiboy').classList.add('selected');
+    if(file.includes('yaya')) document.getElementById('av_yaya').classList.add('selected');
+    if(file.includes('gopal')) document.getElementById('av_gopal').classList.add('selected');
+    if(file.includes('papazola')) document.getElementById('av_papazola').classList.add('selected');
+
+    if (currentUser && usersData[currentUser]) {
+        usersData[currentUser].avatar = file;
+        saveData();
+        updateProfileUI();
     }
 }
 
@@ -649,14 +767,13 @@ function openUserModal() {
 }
 
 function closeUserModal() {
-    if (!currentUser) return; // Mesti ada sekurang-kurangnya 1 user
+    if (!currentUser) return;
     document.getElementById('userModal').classList.add('hidden');
 }
 
 function renderUserList() {
     const container = document.getElementById('userListContainer');
     container.innerHTML = '';
-
     const allUsers = Object.keys(usersData);
 
     if (allUsers.length === 0) {
@@ -665,15 +782,24 @@ function renderUserList() {
     }
 
     allUsers.forEach(name => {
+        const uAvatar = usersData[name].avatar || 'boboiboy.png';
         const row = document.createElement('div');
         row.className = `user-item-row ${name === currentUser ? 'active' : ''}`;
         row.onclick = () => selectUser(name);
         
         row.innerHTML = `
-            <span>👤 ${name}</span>
-            <button class="btn-delete-user" onclick="event.stopPropagation(); deleteSingleUser('${name}')" title="Padam Pemain">
-                <i class="fa-solid fa-trash-can"></i>
-            </button>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${uAvatar}" style="width:28px; height:28px; border-radius:50%; object-fit:cover;" onerror="this.src='boboiboy.png'">
+                <span>${name}</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+                <button class="btn-reset-user-data" onclick="event.stopPropagation(); resetSingleUserScore('${name}')" title="Reset Pencapaian Sahaja">
+                    🔄 Reset Poin
+                </button>
+                <button class="btn-delete-user" onclick="event.stopPropagation(); deleteSingleUser('${name}')" title="Padam Terus Profil">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
         `;
         container.appendChild(row);
     });
@@ -681,6 +807,8 @@ function renderUserList() {
 
 function selectUser(name) {
     currentUser = name;
+    selectedAvatarFile = usersData[name].avatar || 'boboiboy.png';
+    selectAvatarChoice(selectedAvatarFile);
     saveData();
     updateProfileUI();
     closeUserModal();
@@ -697,6 +825,7 @@ function addNewUser() {
 
     currentUser = input;
     ensureUserData(currentUser);
+    usersData[currentUser].avatar = selectedAvatarFile;
     saveData();
     updateProfileUI();
     closeUserModal();
@@ -704,8 +833,30 @@ function addNewUser() {
     renderKuizGrid();
 }
 
+/* RESET HANYA PENCAPAIAN (NAMA KEKAL) */
+function resetSingleUserScore(name) {
+    if (confirm(`Adakah anda pasti mahu RESET SEMUA PENCAPAIAN untuk ${name}?\n\nNama "${name}" akan kekal tetapi semua lencana, bintang, dan semakan hafalan akan dipadam ke sifar (0%).`)) {
+        usersData[name] = {
+            avatar: usersData[name].avatar || 'boboiboy.png',
+            selfRate: {},
+            parentTick: {},
+            quizStars: {},
+            badges: []
+        };
+        saveData();
+        updateProfileUI();
+        renderHafalanGrid();
+        renderKuizGrid();
+        if (!document.getElementById('viewDashboard').classList.contains('hidden')) {
+            renderDashboard();
+        }
+        alert(`Pencapaian untuk ${name} telah berjaya di-reset!`);
+    }
+}
+
+/* PADAM PROFIL NAMA KESELURUHAN */
 function deleteSingleUser(name) {
-    if (confirm(`Adakah anda pasti mahu memadam nama "${name}" dan semua rekodnya?`)) {
+    if (confirm(`Adakah anda pasti mahu MEMADAM TERUS profil nama "${name}"?`)) {
         delete usersData[name];
         if (currentUser === name) {
             const remaining = Object.keys(usersData);
@@ -720,9 +871,9 @@ function deleteSingleUser(name) {
 }
 
 function confirmResetAllData() {
-    if (confirm("ADAKAH ANDA PASTI?\n\nTindakan ini akan MEMADAM SEMUA NAMA PEMAIN dan rekod dalam app ini!")) {
-        localStorage.removeItem('raja_sifir_v3_data');
-        localStorage.removeItem('raja_sifir_v3_lastuser');
+    if (confirm("ADAKAH ANDA PASTI?\n\nTindakan ini akan MEMADAM SEMUA NAMA PEMAIN dan rekod dalam app secara keseluruhan!")) {
+        localStorage.removeItem('raja_sifir_v4_data');
+        localStorage.removeItem('raja_sifir_v4_lastuser');
         usersData = {};
         currentUser = "";
         alert("Semua data telah dipadam.");
@@ -732,6 +883,8 @@ function confirmResetAllData() {
 
 function updateProfileUI() {
     document.getElementById('currentUserName').innerText = currentUser || "Pilih Pemain";
+    const av = (usersData[currentUser] && usersData[currentUser].avatar) ? usersData[currentUser].avatar : 'boboiboy.png';
+    document.getElementById('headerAvatarImg').src = av;
 }
 
 function switchTab(tab) {
@@ -784,9 +937,8 @@ function openHafalanDetail(num) {
     const list = document.getElementById('hafalanList');
     list.innerHTML = '';
     for (let i = 1; i <= 12; i++) {
-        list.innerHTML += `<div class="hafalan-row">${num} × ${i} = ${num * i}</div>`;
+        list.innerHTML += `<div class="hafalan-row">${i} × ${num} = ${i * num}</div>`;
     }
-
     updateHafalanUI();
 }
 
@@ -835,15 +987,27 @@ function showHafalanMenu() {
     renderHafalanGrid();
 }
 
-/* KUIZ MODULE (12 SOALAN RAWAK PER SIFIR) */
+/* KUIZ MODULE & CHARACTER POWER-UP */
 function renderKuizGrid() {
     const grid = document.getElementById('kuizGrid');
     grid.innerHTML = '';
+    const uData = usersData[currentUser] || { quizStars: {} };
+
     for (let i = 2; i <= 12; i++) {
+        const starCount = (uData.quizStars && uData.quizStars[i]) ? uData.quizStars[i] : 0;
+        let starTag = '';
+        if (starCount === 3) starTag = '⭐⭐⭐ (Emas)';
+        else if (starCount === 2) starTag = '⭐⭐ (Perak)';
+        else if (starCount === 1) starTag = '⭐ (Gangsa)';
+        else starTag = 'Belum Main';
+
         const card = document.createElement('div');
         card.className = 'card-sifir';
         card.onclick = () => startKuiz(i);
-        card.innerHTML = `<div class="sifir-num">Sifir ${i}</div><div class="badge-status">12 Soalan Rawak</div>`;
+        card.innerHTML = `
+            <div class="sifir-num">Sifir ${i}</div>
+            <div class="stars-display-tag">${starTag}</div>
+        `;
         grid.appendChild(card);
     }
 }
@@ -852,9 +1016,14 @@ function startKuiz(sifirNum) {
     activeQuiz.num = sifirNum;
     activeQuiz.score = 0;
     activeQuiz.index = 0;
+    activeQuiz.usedPowerup = false;
 
     let multipliers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].sort(() => Math.random() - 0.5);
-    activeQuiz.questions = multipliers.map(m => ({ num1: sifirNum, num2: m, ans: sifirNum * m }));
+    activeQuiz.questions = multipliers.map(m => ({ num1: m, num2: sifirNum, ans: m * sifirNum }));
+
+    const av = (usersData[currentUser] && usersData[currentUser].avatar) ? usersData[currentUser].avatar : 'boboiboy.png';
+    document.getElementById('quizCharImg').src = av;
+    document.getElementById('btnPowerupYaya').disabled = false;
 
     document.getElementById('viewKuizMenu').classList.add('hidden');
     document.getElementById('viewKuizPlay').classList.remove('hidden');
@@ -867,6 +1036,9 @@ function renderQuestion() {
     document.getElementById('quizScoreText').innerText = `Markah: ${activeQuiz.score}`;
     document.getElementById('questionDisplay').innerText = `${q.num1} × ${q.num2} = ?`;
 
+    const speech = SPEECHES[Math.floor(Math.random() * SPEECHES.length)];
+    document.getElementById('quizCharSpeech').innerText = speech;
+
     const grid = document.getElementById('answersGrid');
     grid.innerHTML = '';
 
@@ -878,6 +1050,25 @@ function renderQuestion() {
         btn.onclick = () => handleAnswer(c, q.ans, btn);
         grid.appendChild(btn);
     });
+}
+
+function useYayaBiskutPower() {
+    if (activeQuiz.usedPowerup) return;
+    activeQuiz.usedPowerup = true;
+    document.getElementById('btnPowerupYaya').disabled = true;
+
+    const q = activeQuiz.questions[activeQuiz.index];
+    const btns = Array.from(document.querySelectorAll('.option-btn'));
+    
+    let removed = 0;
+    btns.forEach(b => {
+        if (parseInt(b.innerText) !== q.ans && removed < 2) {
+            b.style.visibility = 'hidden';
+            removed++;
+        }
+    });
+
+    document.getElementById('quizCharSpeech').innerText = '"Biskut Yaya membantu! Dua pilihan salah telah dihilangkan!"';
 }
 
 function generateChoices(correct) {
@@ -913,20 +1104,43 @@ function finishKuiz() {
     document.getElementById('viewKuizPlay').classList.add('hidden');
     document.getElementById('viewKuizResult').classList.remove('hidden');
 
-    document.getElementById('resultScoreText').innerText = `Anda menjawab ${activeQuiz.score}/12 betul!`;
+    const finalScore = activeQuiz.score;
+    let earnedStars = 0;
+    if (finalScore === 12) earnedStars = 3;
+    else if (finalScore >= 10) earnedStars = 2;
+    else if (finalScore >= 8) earnedStars = 1;
+
+    let starStr = '';
+    for (let i = 0; i < 3; i++) {
+        starStr += (i < earnedStars) ? '⭐' : '☆';
+    }
+    document.getElementById('resultStarsDisplay').innerText = starStr || '☆';
+    document.getElementById('resultScoreText').innerText = `Anda menjawab ${finalScore}/12 betul!`;
     
+    ensureUserData(currentUser);
+    if (!usersData[currentUser].quizStars) usersData[currentUser].quizStars = {};
+    const prevStars = usersData[currentUser].quizStars[activeQuiz.num] || 0;
+    
+    if (earnedStars > prevStars) {
+        usersData[currentUser].quizStars[activeQuiz.num] = earnedStars;
+    }
+
     let unlockedText = '';
-    if (activeQuiz.score === 12) {
-        ensureUserData(currentUser);
+    if (earnedStars >= 2) {
         if (!usersData[currentUser].badges) usersData[currentUser].badges = [];
         const badgeId = `b_s${activeQuiz.num}`;
         if (!usersData[currentUser].badges.includes(badgeId)) {
             usersData[currentUser].badges.push(badgeId);
-            saveData();
             unlockedText = `🎉 TAHNIAH! Anda membuka Lencana Sifir ${activeQuiz.num}!`;
             if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
+        } else {
+            unlockedText = `⭐ Tahniah! Rekod Bintang Sifir ${activeQuiz.num} anda telah dikemas kini!`;
         }
+    } else {
+        unlockedText = `Cuba lagi untuk sekurang-kurangnya 10/12 betul (2 Bintang) bagi mendapat Lencana!`;
     }
+
+    saveData();
     document.getElementById('badgeUnlockedText').innerText = unlockedText;
 }
 
