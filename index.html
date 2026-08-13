@@ -123,10 +123,10 @@
 
         .btn-nav {
             border: none;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -473,42 +473,6 @@
             background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 8px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 12px; font-size: 12px;
         }
 
-        /* BANNER INSTALL PWA POPUP */
-        .pwa-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 420px;
-            background: #10b981;
-            color: white;
-            padding: 14px 20px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 99;
-            animation: slideUp 0.4s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translate(-50%, 100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        .btn-pwa-install-now {
-            background: white;
-            color: #047857;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 16px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
         @media (max-width: 600px) {
             .question-text { font-size: 38px; }
             .option-btn { font-size: 24px; padding: 12px; }
@@ -677,18 +641,6 @@
     </div>
 </div>
 
-<!-- POPUP BANNER PROMOSI PASANG APP (LETAK KAT BAWAH SKRIN) -->
-<div class="pwa-banner hidden" id="pwaBanner">
-    <div>
-        <div style="font-weight: 700; font-size: 14px;">📲 Pasang App Raja Sifir</div>
-        <div style="font-size: 11px; opacity: 0.9;">Boleh main tanpa internet!</div>
-    </div>
-    <div style="display:flex; gap:8px;">
-        <button class="btn-pwa-install-now" onclick="triggerPwaInstall()">Pasang</button>
-        <button style="background:none; border:none; color:white; font-size:16px;" onclick="closePwaBanner()">✕</button>
-    </div>
-</div>
-
 <!-- Modal User Switcher & Avatar Selector -->
 <div class="modal-overlay hidden" id="userModal">
     <div class="modal-card">
@@ -723,65 +675,66 @@
     </div>
 </div>
 
-<!-- Modal Panduan Install App -->
+<!-- Modal Panduan Install App (MUNCUL SELEPAS PILIH NAMA) -->
 <div class="modal-overlay hidden" id="installGuideModal">
     <div class="modal-card">
-        <h3 style="color: #10b981; margin-bottom: 8px;">📲 Cara Pasang App Manual</h3>
-        <p style="color: #475569; font-size: 14px; line-height: 1.5; text-align: left; margin: 10px 0;">
-            <strong>Untuk Android (Chrome):</strong><br>
-            1. Tekan <strong>3 Titik (⋮)</strong> di bahagian atas sebelah kanan pelayar anda.<br>
-            2. Pilih <strong>'Add to Home screen'</strong> atau <strong>'Install app'</strong>.<br><br>
-            <strong>Untuk iPhone (Safari):</strong><br>
-            1. Tekan butang <strong>Share (􀈂)</strong> di bahagian bawah skrin.<br>
-            2. Skrol dan pilih <strong>'Add to Home Screen'</strong>.
-        </p>
-        <button class="btn-action" onclick="closeInstallGuideModal()" style="background: #10b981; margin-top: 10px;">Faham!</button>
+        <div style="font-size: 42px; margin-bottom: 6px;">📲</div>
+        <h3 style="color: #10b981; margin-bottom: 8px;">Pasang App Raja Sifir Cilik</h3>
+        <p style="color: #64748b; font-size: 13px; margin-bottom: 15px;">Simpan app ini kat skrin utama telefon supaya boleh dimainkan secara <strong>OFFLINE</strong> tanpa internet!</p>
+        
+        <button class="btn-action" onclick="triggerPwaInstallPrompt()" style="background: #10b981; margin-bottom: 12px;">
+            ⚡ Pasang Sekarang
+        </button>
+
+        <div style="background: #f8fafc; padding: 12px; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 12px; color: #475569; text-align: left; line-height: 1.5;">
+            <strong>Jika tiada respon automatik:</strong><br>
+            • <strong>Android (Chrome):</strong> Tekan <strong>3 Titik (⋮)</strong> kat atas $\rightarrow$ <em>'Add to Home screen' / 'Pasang App'</em>.<br>
+            • <strong>iPhone (Safari):</strong> Tekan butang <strong>Share (􀈂)</strong> kat bawah $\rightarrow$ <em>'Add to Home Screen'</em>.
+        </div>
+
+        <button class="btn-nav" onclick="closeInstallGuideModal()" style="width: 100%; justify-content: center; margin-top: 12px; background: #e2e8f0;">
+            Langkah Ini Nanti / Teruskan Main
+        </button>
     </div>
 </div>
 
 <script>
 /* PWA INSTALLATION PROMPT LOGIC */
 let deferredPwaPrompt = null;
-
-// Semak sama ada app ini sudah dibuka dalam mod App (Standalone / Installed)
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPwaPrompt = e;
-    
-    // Tunjuk banner jika belum dipasang & bukan dalam mod standalone
-    if (!isStandalone) {
-        document.getElementById('pwaBanner').classList.remove('hidden');
-    }
 });
 
-function triggerPwaInstall() {
-    if (deferredPwaPrompt) {
-        deferredPwaPrompt.prompt();
-        deferredPwaPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                closePwaBanner();
-            }
-            deferredPwaPrompt = null;
-        });
-    } else {
+function checkAndShowInstallModal() {
+    // Hanya tunjuk jika bukan dalam mod standalone (app) & belum pernah tutup
+    if (!isStandalone && !localStorage.getItem('raja_sifir_install_prompted')) {
         document.getElementById('installGuideModal').classList.remove('hidden');
     }
 }
 
-function closePwaBanner() {
-    document.getElementById('pwaBanner').classList.add('hidden');
+function triggerPwaInstallPrompt() {
+    if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt.userChoice.then((choiceResult) => {
+            closeInstallGuideModal();
+            deferredPwaPrompt = null;
+        });
+    } else {
+        alert("Sila gunakan langkah manual yang tertera di dalam kotak arahan di bawah.");
+    }
 }
 
 function closeInstallGuideModal() {
+    localStorage.setItem('raja_sifir_install_prompted', 'true');
     document.getElementById('installGuideModal').classList.add('hidden');
 }
 
 window.addEventListener('appinstalled', () => {
-    closePwaBanner();
+    closeInstallGuideModal();
     deferredPwaPrompt = null;
-    console.log('PWA Berjaya Dipasang!');
 });
 
 /* BADGES DEFINITION (Total 100 Pts) */
@@ -823,6 +776,7 @@ window.addEventListener('DOMContentLoaded', () => {
         openUserModal();
     } else {
         updateProfileUI();
+        checkAndShowInstallModal();
     }
 });
 
@@ -878,6 +832,7 @@ function openUserModal() {
 function closeUserModal() {
     if (!currentUser) return;
     document.getElementById('userModal').classList.add('hidden');
+    checkAndShowInstallModal();
 }
 
 function renderUserList() {
@@ -981,6 +936,7 @@ function confirmResetAllData() {
     if (confirm("ADAKAH ANDA PASTI?\n\nTindakan ini akan MEMADAM SEMUA NAMA PEMAIN dan rekod dalam app secara keseluruhan!")) {
         localStorage.removeItem('raja_sifir_v4_data');
         localStorage.removeItem('raja_sifir_v4_lastuser');
+        localStorage.removeItem('raja_sifir_install_prompted');
         usersData = {};
         currentUser = "";
         alert("Semua data telah dipadam.");
