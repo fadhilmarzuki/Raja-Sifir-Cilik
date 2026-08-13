@@ -29,7 +29,7 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker PWA Registered:', reg.scope))
+            .then(reg => console.log('Service Worker Registered:', reg.scope))
             .catch(err => console.log('Service Worker Failed:', err));
         });
       }
@@ -141,27 +141,6 @@
             background: var(--primary-orange);
             color: white;
             box-shadow: 0 4px 12px rgba(255, 159, 67, 0.4);
-        }
-
-        .btn-install-pwa {
-            background: linear-gradient(45deg, #10b981, #059669);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-            animation: pulseBtn 2s infinite;
-        }
-
-        @keyframes pulseBtn {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
         }
 
         .view-content {
@@ -494,6 +473,42 @@
             background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 8px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 12px; font-size: 12px;
         }
 
+        /* BANNER INSTALL PWA POPUP */
+        .pwa-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 420px;
+            background: #10b981;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 99;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        .btn-pwa-install-now {
+            background: white;
+            color: #047857;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
         @media (max-width: 600px) {
             .question-text { font-size: 38px; }
             .option-btn { font-size: 24px; padding: 12px; }
@@ -514,9 +529,6 @@
         </div>
 
         <div class="nav-menu">
-            <button class="btn-install-pwa hidden" id="btnInstallPwa" onclick="triggerPwaInstall()">
-                <i class="fa-solid fa-download"></i> Pasang App
-            </button>
             <button class="btn-nav active" id="navHafalan" onclick="switchTab('hafalan')">
                 <i class="fa-solid fa-book-open"></i> Hafalan
             </button>
@@ -665,6 +677,18 @@
     </div>
 </div>
 
+<!-- POPUP BANNER PROMOSI PASANG APP (LETAK KAT BAWAH SKRIN) -->
+<div class="pwa-banner hidden" id="pwaBanner">
+    <div>
+        <div style="font-weight: 700; font-size: 14px;">📲 Pasang App Raja Sifir</div>
+        <div style="font-size: 11px; opacity: 0.9;">Boleh main tanpa internet!</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+        <button class="btn-pwa-install-now" onclick="triggerPwaInstall()">Pasang</button>
+        <button style="background:none; border:none; color:white; font-size:16px;" onclick="closePwaBanner()">✕</button>
+    </div>
+</div>
+
 <!-- Modal User Switcher & Avatar Selector -->
 <div class="modal-overlay hidden" id="userModal">
     <div class="modal-card">
@@ -699,33 +723,65 @@
     </div>
 </div>
 
+<!-- Modal Panduan Install App -->
+<div class="modal-overlay hidden" id="installGuideModal">
+    <div class="modal-card">
+        <h3 style="color: #10b981; margin-bottom: 8px;">📲 Cara Pasang App Manual</h3>
+        <p style="color: #475569; font-size: 14px; line-height: 1.5; text-align: left; margin: 10px 0;">
+            <strong>Untuk Android (Chrome):</strong><br>
+            1. Tekan <strong>3 Titik (⋮)</strong> di bahagian atas sebelah kanan pelayar anda.<br>
+            2. Pilih <strong>'Add to Home screen'</strong> atau <strong>'Install app'</strong>.<br><br>
+            <strong>Untuk iPhone (Safari):</strong><br>
+            1. Tekan butang <strong>Share (􀈂)</strong> di bahagian bawah skrin.<br>
+            2. Skrol dan pilih <strong>'Add to Home Screen'</strong>.
+        </p>
+        <button class="btn-action" onclick="closeInstallGuideModal()" style="background: #10b981; margin-top: 10px;">Faham!</button>
+    </div>
+</div>
+
 <script>
 /* PWA INSTALLATION PROMPT LOGIC */
 let deferredPwaPrompt = null;
 
+// Semak sama ada app ini sudah dibuka dalam mod App (Standalone / Installed)
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPwaPrompt = e;
-    document.getElementById('btnInstallPwa').classList.remove('hidden');
+    
+    // Tunjuk banner jika belum dipasang & bukan dalam mod standalone
+    if (!isStandalone) {
+        document.getElementById('pwaBanner').classList.remove('hidden');
+    }
 });
 
 function triggerPwaInstall() {
-    if (!deferredPwaPrompt) {
-        alert("Sila gunakan pilihan 'Add to Home Screen' dari menu pelayar anda.");
-        return;
+    if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                closePwaBanner();
+            }
+            deferredPwaPrompt = null;
+        });
+    } else {
+        document.getElementById('installGuideModal').classList.remove('hidden');
     }
-    deferredPwaPrompt.prompt();
-    deferredPwaPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            document.getElementById('btnInstallPwa').classList.add('hidden');
-        }
-        deferredPwaPrompt = null;
-    });
+}
+
+function closePwaBanner() {
+    document.getElementById('pwaBanner').classList.add('hidden');
+}
+
+function closeInstallGuideModal() {
+    document.getElementById('installGuideModal').classList.add('hidden');
 }
 
 window.addEventListener('appinstalled', () => {
-    document.getElementById('btnInstallPwa').classList.add('hidden');
+    closePwaBanner();
     deferredPwaPrompt = null;
+    console.log('PWA Berjaya Dipasang!');
 });
 
 /* BADGES DEFINITION (Total 100 Pts) */
