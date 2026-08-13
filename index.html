@@ -102,6 +102,11 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(253, 203, 110, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .user-pill:hover {
+            transform: scale(1.03);
         }
 
         .nav-menu {
@@ -326,22 +331,72 @@
         .sijil-title { font-family: var(--font-title); font-size: 32px; color: #d97706; margin-bottom: 10px; }
         .sijil-name { font-size: 36px; font-weight: 700; color: #1e293b; border-bottom: 2px solid #cbd5e1; display: inline-block; padding: 0 20px; margin: 15px 0; }
 
-        /* Modal Styles */
+        /* Modal & User List Styles */
         .modal-overlay {
             position: fixed; top:0; left:0; right:0; bottom:0;
             background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
         }
 
         .modal-card {
-            background: white; border-radius: 32px; padding: 28px; width: 100%; max-width: 400px; text-align: center;
+            background: white; border-radius: 32px; padding: 28px; width: 100%; max-width: 440px; text-align: center; max-height: 90vh; overflow-y: auto;
+        }
+
+        .user-list-container {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .user-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 10px 16px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-item-row:hover {
+            border-color: var(--primary-orange);
+            background: #fff8f0;
+        }
+
+        .user-item-row.active {
+            border-color: var(--primary-orange);
+            background: #ffedd5;
+            font-weight: 700;
+        }
+
+        .btn-delete-user {
+            color: #ef4444;
+            background: none;
+            border: none;
+            padding: 6px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .btn-delete-user:hover {
+            background: #fee2e2;
         }
 
         .input-custom {
-            width: 100%; padding: 14px; border-radius: 20px; border: 2px solid #cbd5e1; font-size: 18px; text-align: center; margin: 16px 0; outline: none;
+            width: 100%; padding: 12px 16px; border-radius: 16px; border: 2px solid #cbd5e1; font-size: 16px; text-align: center; margin: 10px 0; outline: none;
         }
 
         .btn-action {
-            width: 100%; padding: 14px; background: var(--primary-orange); color: white; border: none; border-radius: 20px; font-size: 18px; font-weight: 700; cursor: pointer;
+            width: 100%; padding: 14px; background: var(--primary-orange); color: white; border: none; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer;
+        }
+
+        .btn-reset-all {
+            background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 10px; border-radius: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 15px; font-size: 13px;
         }
 
         @media (max-width: 600px) {
@@ -359,8 +414,8 @@
     <div class="header-bar">
         <div class="user-pill" onclick="openUserModal()">
             <i class="fa-solid fa-crown" style="color: #d97706;"></i>
-            <span id="currentUserName">Fawwaz</span>
-            <i class="fa-solid fa-arrows-rotate" style="font-size: 12px; margin-left: 4px; opacity: 0.6;"></i>
+            <span id="currentUserName">Danial</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 12px; margin-left: 4px; opacity: 0.6;"></i>
         </div>
 
         <div class="nav-menu">
@@ -468,12 +523,6 @@
 
             <h3 style="margin-bottom: 12px; color: #334155;">Carta Kedudukan Pemain</h3>
             <div style="background: white; border-radius: 20px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" id="leaderboardList"></div>
-
-            <div style="text-align: center; margin-top: 25px;">
-                <button onclick="confirmResetData()" style="background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 10px 18px; border-radius: 16px; font-weight: 700; cursor: pointer;">
-                    🗑️ Reset Data Pemain Ini
-                </button>
-            </div>
         </div>
 
         <!-- VIEW 4: SIJIL -->
@@ -482,7 +531,7 @@
                 <div style="font-size: 50px; margin-bottom: 10px;">👑</div>
                 <div class="sijil-title">SIJIL PENGUKURAN RAJA SIFIR CILIK</div>
                 <p style="color: #64748b;">Dengan ini diperakui bahawa</p>
-                <div class="sijil-name" id="sijilUserName">Fawwaz</div>
+                <div class="sijil-name" id="sijilUserName">Danial</div>
                 <p style="color: #475569; font-size: 18px; margin-top: 10px;">telah berjaya menguasai Hafalan & Kuiz Sifir 2 hingga 12 dengan pencapaian cemerlang <strong><span id="sijilScorePct">95</span>%</strong>!</p>
                 <div style="margin-top: 30px; display: flex; justify-content: space-around; align-items: flex-end;">
                     <div>
@@ -505,18 +554,35 @@
     </div>
 </div>
 
-<!-- Modal User Input -->
+<!-- Modal User Switcher & Manager -->
 <div class="modal-overlay hidden" id="userModal">
     <div class="modal-card">
-        <h2 style="color: #1e293b; margin-bottom: 8px;">Siapa Yang Bermain?</h2>
-        <p style="color: #64748b; font-size: 14px;">Masukkan nama anak untuk rekod profil:</p>
-        <input type="text" id="usernameInput" class="input-custom" placeholder="Contoh: Fawwaz" maxlength="12">
-        <button class="btn-action" onclick="saveUserSelection()">Mula Bermain!</button>
+        <h2 style="color: #1e293b; margin-bottom: 4px;">Pilih Pemain</h2>
+        <p style="color: #64748b; font-size: 13px;">Pilih nama anak atau tambah pemain baharu:</p>
+        
+        <!-- Senarai Pemain Sedia Ada -->
+        <div class="user-list-container" id="userListContainer"></div>
+
+        <hr style="margin: 12px 0; border: none; border-top: 1px dashed #e2e8f0;">
+
+        <!-- Tambah Pemain Baharu -->
+        <p style="font-size: 13px; font-weight: 700; color: #475569; text-align: left;">+ Tambah Pemain Baharu:</p>
+        <input type="text" id="usernameInput" class="input-custom" placeholder="Taip Nama Baharu..." maxlength="12">
+        
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn-action" onclick="addNewUser()">Tambah & Main</button>
+            <button class="btn-nav" onclick="closeUserModal()" style="padding: 12px;">Batal</button>
+        </div>
+
+        <!-- Reset Keseluruhan -->
+        <button class="btn-reset-all" onclick="confirmResetAllData()">
+            🗑️ Padam SEMUA Nama & Data
+        </button>
     </div>
 </div>
 
 <script>
-/* BADGES DEFINITION (Setiap lencana beri Poin) */
+/* BADGES DEFINITION (Total 100 Pts) */
 const BADGES = [
     { id: 'b_s2', title: 'Wira Sifir 2', pts: 8, desc: 'Selesai Kuiz Sifir 2 (Sempurna)', icon: '✌️' },
     { id: 'b_s3', title: 'Pakar Sifir 3', pts: 8, desc: 'Selesai Kuiz Sifir 3 (Sempurna)', icon: '☘️' },
@@ -530,10 +596,10 @@ const BADGES = [
     { id: 'b_s11', title: 'Master Sifir 11', pts: 11, desc: 'Selesai Kuiz Sifir 11 (Sempurna)', icon: '🚀' },
     { id: 'b_s12', title: 'Legenda Sifir 12', pts: 12, desc: 'Selesai Kuiz Sifir 12 (Sempurna)', icon: '👑' },
 ];
-const MAX_TOTAL_POINTS = BADGES.reduce((acc, b) => acc + b.pts, 0); // Total 100 Pts
+const MAX_TOTAL_POINTS = BADGES.reduce((acc, b) => acc + b.pts, 0);
 
 /* APP STATE */
-let currentUser = "Fawwaz";
+let currentUser = "";
 let usersData = {};
 let activeHafalanNum = 2;
 let activeQuiz = { num: 2, questions: [], index: 0, score: 0 };
@@ -542,8 +608,11 @@ window.addEventListener('DOMContentLoaded', () => {
     loadData();
     renderHafalanGrid();
     renderKuizGrid();
-    if (!currentUser) openUserModal();
-    else updateProfileUI();
+    if (!currentUser || Object.keys(usersData).length === 0) {
+        openUserModal();
+    } else {
+        updateProfileUI();
+    }
 });
 
 function loadData() {
@@ -552,9 +621,11 @@ function loadData() {
         try { usersData = JSON.parse(saved); } catch(e) { usersData = {}; }
     }
     const last = localStorage.getItem('raja_sifir_v3_lastuser');
-    if (last) currentUser = last;
-    else if (Object.keys(usersData).length > 0) currentUser = Object.keys(usersData)[0];
-
+    if (last && usersData[last]) {
+        currentUser = last;
+    } else if (Object.keys(usersData).length > 0) {
+        currentUser = Object.keys(usersData)[0];
+    }
     ensureUserData(currentUser);
 }
 
@@ -570,25 +641,97 @@ function ensureUserData(name) {
     }
 }
 
+/* USER MANAGER MODAL LOGIC */
 function openUserModal() {
+    renderUserList();
+    document.getElementById('usernameInput').value = '';
     document.getElementById('userModal').classList.remove('hidden');
-    document.getElementById('usernameInput').value = currentUser || '';
 }
 
-function saveUserSelection() {
-    const val = document.getElementById('usernameInput').value.trim();
-    if (!val) return;
-    currentUser = val;
+function closeUserModal() {
+    if (!currentUser) return; // Mesti ada sekurang-kurangnya 1 user
+    document.getElementById('userModal').classList.add('hidden');
+}
+
+function renderUserList() {
+    const container = document.getElementById('userListContainer');
+    container.innerHTML = '';
+
+    const allUsers = Object.keys(usersData);
+
+    if (allUsers.length === 0) {
+        container.innerHTML = `<p style="font-size: 13px; color: #94a3b8;">Tiada pemain didaftarkan lagi.</p>`;
+        return;
+    }
+
+    allUsers.forEach(name => {
+        const row = document.createElement('div');
+        row.className = `user-item-row ${name === currentUser ? 'active' : ''}`;
+        row.onclick = () => selectUser(name);
+        
+        row.innerHTML = `
+            <span>👤 ${name}</span>
+            <button class="btn-delete-user" onclick="event.stopPropagation(); deleteSingleUser('${name}')" title="Padam Pemain">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        `;
+        container.appendChild(row);
+    });
+}
+
+function selectUser(name) {
+    currentUser = name;
+    saveData();
+    updateProfileUI();
+    closeUserModal();
+    renderHafalanGrid();
+    renderKuizGrid();
+    if (!document.getElementById('viewDashboard').classList.contains('hidden')) {
+        renderDashboard();
+    }
+}
+
+function addNewUser() {
+    const input = document.getElementById('usernameInput').value.trim();
+    if (!input) return;
+
+    currentUser = input;
     ensureUserData(currentUser);
     saveData();
     updateProfileUI();
-    document.getElementById('userModal').classList.add('hidden');
+    closeUserModal();
     renderHafalanGrid();
     renderKuizGrid();
 }
 
+function deleteSingleUser(name) {
+    if (confirm(`Adakah anda pasti mahu memadam nama "${name}" dan semua rekodnya?`)) {
+        delete usersData[name];
+        if (currentUser === name) {
+            const remaining = Object.keys(usersData);
+            currentUser = remaining.length > 0 ? remaining[0] : "";
+        }
+        saveData();
+        updateProfileUI();
+        renderUserList();
+        renderHafalanGrid();
+        renderKuizGrid();
+    }
+}
+
+function confirmResetAllData() {
+    if (confirm("ADAKAH ANDA PASTI?\n\nTindakan ini akan MEMADAM SEMUA NAMA PEMAIN dan rekod dalam app ini!")) {
+        localStorage.removeItem('raja_sifir_v3_data');
+        localStorage.removeItem('raja_sifir_v3_lastuser');
+        usersData = {};
+        currentUser = "";
+        alert("Semua data telah dipadam.");
+        window.location.reload();
+    }
+}
+
 function updateProfileUI() {
-    document.getElementById('currentUserName').innerText = currentUser || "Fawwaz";
+    document.getElementById('currentUserName').innerText = currentUser || "Pilih Pemain";
 }
 
 function switchTab(tab) {
@@ -620,7 +763,7 @@ function renderHafalanGrid() {
     const uData = usersData[currentUser] || { parentTick: {} };
 
     for (let i = 2; i <= 12; i++) {
-        const isChecked = uData.parentTick[i] || false;
+        const isChecked = uData.parentTick ? (uData.parentTick[i] || false) : false;
         const card = document.createElement('div');
         card.className = 'card-sifir';
         card.onclick = () => openHafalanDetail(i);
@@ -649,16 +792,14 @@ function openHafalanDetail(num) {
 
 function updateHafalanUI() {
     const uData = usersData[currentUser] || { selfRate: {}, parentTick: {} };
-    const rate = uData.selfRate[activeHafalanNum] || 0;
-    const isTick = uData.parentTick[activeHafalanNum] || false;
+    const rate = uData.selfRate ? (uData.selfRate[activeHafalanNum] || 0) : 0;
+    const isTick = uData.parentTick ? (uData.parentTick[activeHafalanNum] || false) : false;
 
-    // Self rate stars
     const stars = document.getElementById('starRatingSelf').children;
     for (let i = 0; i < 3; i++) {
         stars[i].className = (i < rate) ? 'selected' : '';
     }
 
-    // Parent Tick Button
     const btn = document.getElementById('btnParentTick');
     if (isTick) {
         btn.innerText = 'Disemak Ibu Bapa ✅';
@@ -673,6 +814,7 @@ function updateHafalanUI() {
 
 function rateSelf(stars) {
     ensureUserData(currentUser);
+    if (!usersData[currentUser].selfRate) usersData[currentUser].selfRate = {};
     usersData[currentUser].selfRate[activeHafalanNum] = stars;
     saveData();
     updateHafalanUI();
@@ -680,6 +822,7 @@ function rateSelf(stars) {
 
 function toggleParentTick() {
     ensureUserData(currentUser);
+    if (!usersData[currentUser].parentTick) usersData[currentUser].parentTick = {};
     const curr = usersData[currentUser].parentTick[activeHafalanNum] || false;
     usersData[currentUser].parentTick[activeHafalanNum] = !curr;
     saveData();
@@ -692,7 +835,7 @@ function showHafalanMenu() {
     renderHafalanGrid();
 }
 
-/* KUIZ MODULE (12 SOALAN PER SIFIR) */
+/* KUIZ MODULE (12 SOALAN RAWAK PER SIFIR) */
 function renderKuizGrid() {
     const grid = document.getElementById('kuizGrid');
     grid.innerHTML = '';
@@ -710,7 +853,6 @@ function startKuiz(sifirNum) {
     activeQuiz.score = 0;
     activeQuiz.index = 0;
 
-    // Jana 12 soalan rawak (1x hingga 12x)
     let multipliers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].sort(() => Math.random() - 0.5);
     activeQuiz.questions = multipliers.map(m => ({ num1: sifirNum, num2: m, ans: sifirNum * m }));
 
@@ -773,10 +915,10 @@ function finishKuiz() {
 
     document.getElementById('resultScoreText').innerText = `Anda menjawab ${activeQuiz.score}/12 betul!`;
     
-    // Check Badge Unlock (Jawab 12/12 betul)
     let unlockedText = '';
     if (activeQuiz.score === 12) {
         ensureUserData(currentUser);
+        if (!usersData[currentUser].badges) usersData[currentUser].badges = [];
         const badgeId = `b_s${activeQuiz.num}`;
         if (!usersData[currentUser].badges.includes(badgeId)) {
             usersData[currentUser].badges.push(badgeId);
@@ -793,10 +935,9 @@ function renderDashboard() {
     ensureUserData(currentUser);
     const uData = usersData[currentUser] || { badges: [] };
 
-    // Calculate Percentage based on badge points
     let earnedPts = 0;
     BADGES.forEach(b => {
-        if (uData.badges.includes(b.id)) earnedPts += b.pts;
+        if ((uData.badges || []).includes(b.id)) earnedPts += b.pts;
     });
 
     let pct = Math.min(100, Math.round((earnedPts / MAX_TOTAL_POINTS) * 100));
@@ -804,7 +945,6 @@ function renderDashboard() {
     document.getElementById('overallProgressBar').style.width = pct + '%';
     document.getElementById('overallProgressText').innerText = `${pct}% Cemerlang`;
 
-    // Show/Hide Claim Sijil Button (Requires 95% or higher)
     const btnSijil = document.getElementById('btnClaimSijil');
     if (pct >= 95) {
         btnSijil.style.display = 'inline-block';
@@ -812,11 +952,10 @@ function renderDashboard() {
         btnSijil.style.display = 'none';
     }
 
-    // Render Badges Container
     const bContainer = document.getElementById('badgesContainer');
     bContainer.innerHTML = '';
     BADGES.forEach(b => {
-        const isUnlocked = uData.badges.includes(b.id);
+        const isUnlocked = (uData.badges || []).includes(b.id);
         const card = document.createElement('div');
         card.className = `badge-card ${isUnlocked ? '' : 'locked'}`;
         card.innerHTML = `
@@ -829,7 +968,6 @@ function renderDashboard() {
         bContainer.appendChild(card);
     });
 
-    // Render Leaderboard
     const lbContainer = document.getElementById('leaderboardList');
     lbContainer.innerHTML = '';
 
@@ -868,15 +1006,6 @@ function showSijilView() {
         document.getElementById(id).classList.add('hidden');
     });
     document.getElementById('viewSijil').classList.remove('hidden');
-}
-
-function confirmResetData() {
-    if (confirm(`Adakah anda pasti mahu memadam semua rekod lencana & markah untuk ${currentUser}?`)) {
-        delete usersData[currentUser];
-        saveData();
-        alert("Data berjaya dipadam.");
-        window.location.reload();
-    }
 }
 </script>
 
