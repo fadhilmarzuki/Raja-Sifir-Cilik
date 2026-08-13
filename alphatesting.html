@@ -29,7 +29,7 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker PWA Registered:', reg.scope))
+            .then(reg => console.log('Service Worker Registered:', reg.scope))
             .catch(err => console.log('Service Worker Failed:', err));
         });
       }
@@ -118,14 +118,15 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn-nav {
             border: none;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -140,6 +141,27 @@
             background: var(--primary-orange);
             color: white;
             box-shadow: 0 4px 12px rgba(255, 159, 67, 0.4);
+        }
+
+        .btn-install-pwa {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            animation: pulseBtn 2s infinite;
+        }
+
+        @keyframes pulseBtn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .view-content {
@@ -492,6 +514,9 @@
         </div>
 
         <div class="nav-menu">
+            <button class="btn-install-pwa" onclick="triggerPwaInstall()">
+                <i class="fa-solid fa-download"></i> Pasang App
+            </button>
             <button class="btn-nav active" id="navHafalan" onclick="switchTab('hafalan')">
                 <i class="fa-solid fa-book-open"></i> Hafalan
             </button>
@@ -674,7 +699,46 @@
     </div>
 </div>
 
+<!-- Modal Panduan Install App -->
+<div class="modal-overlay hidden" id="installGuideModal">
+    <div class="modal-card">
+        <h3 style="color: #10b981; margin-bottom: 8px;">📲 Pasang Raja Sifir Cilik</h3>
+        <p style="color: #475569; font-size: 14px; line-height: 1.5; text-align: left; margin: 10px 0;">
+            <strong>Untuk Android (Chrome):</strong><br>
+            1. Tekan <strong>3 Titik (⋮)</strong> di bahagian atas sebelah kanan pelayar anda.<br>
+            2. Pilih <strong>'Add to Home screen'</strong> atau <strong>'Install app'</strong>.<br><br>
+            <strong>Untuk iPhone (Safari):</strong><br>
+            1. Tekan butang <strong>Share (􀈂)</strong> di bahagian bawah skrin.<br>
+            2. Skrol dan pilih <strong>'Add to Home Screen'</strong>.
+        </p>
+        <button class="btn-action" onclick="closeInstallGuideModal()" style="background: #10b981; margin-top: 10px;">Faham!</button>
+    </div>
+</div>
+
 <script>
+/* PWA INSTALLATION PROMPT LOGIC */
+let deferredPwaPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPwaPrompt = e;
+});
+
+function triggerPwaInstall() {
+    if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt.userChoice.then((choiceResult) => {
+            deferredPwaPrompt = null;
+        });
+    } else {
+        document.getElementById('installGuideModal').classList.remove('hidden');
+    }
+}
+
+function closeInstallGuideModal() {
+    document.getElementById('installGuideModal').classList.add('hidden');
+}
+
 /* BADGES DEFINITION (Total 100 Pts) */
 const BADGES = [
     { id: 'b_s2', title: 'Wira Kebenaran Sifir 2', pts: 8, desc: 'Sifir 2 (Sekurang-kurangnya 2 Bintang)', icon: '⚡' },
@@ -833,7 +897,6 @@ function addNewUser() {
     renderKuizGrid();
 }
 
-/* RESET HANYA PENCAPAIAN (NAMA KEKAL) */
 function resetSingleUserScore(name) {
     if (confirm(`Adakah anda pasti mahu RESET SEMUA PENCAPAIAN untuk ${name}?\n\nNama "${name}" akan kekal tetapi semua lencana, bintang, dan semakan hafalan akan dipadam ke sifar (0%).`)) {
         usersData[name] = {
@@ -854,7 +917,6 @@ function resetSingleUserScore(name) {
     }
 }
 
-/* PADAM PROFIL NAMA KESELURUHAN */
 function deleteSingleUser(name) {
     if (confirm(`Adakah anda pasti mahu MEMADAM TERUS profil nama "${name}"?`)) {
         delete usersData[name];
