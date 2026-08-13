@@ -1,6 +1,7 @@
 {
   "name": "Raja Sifir Cilik",
   "short_name": "Raja Sifir",
+  "description": "App Hafal & Kuiz Sifir Kanak-Kanak",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ff9f43",
@@ -11,13 +12,25 @@
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
