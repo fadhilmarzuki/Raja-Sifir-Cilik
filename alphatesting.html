@@ -202,6 +202,12 @@
             color: #15803d;
         }
 
+        .stars-display-tag {
+            font-size: 14px;
+            color: #f1c40f;
+            margin-top: 4px;
+        }
+
         /* Hafalan Page */
         .hafalan-box {
             background: white;
@@ -535,7 +541,7 @@
         <!-- VIEW 2: KUIZ MENU -->
         <div id="viewKuizMenu" class="hidden" style="width:100%; text-align:center;">
             <h1 style="font-family: var(--font-title); color: #d97706;">Cabaran Kuiz Sifir 🎯</h1>
-            <p style="color: #64748b;">Jawab 12 soalan rawak ($1\times$ hingga $12\times$) untuk kumpul lencana adiwira!</p>
+            <p style="color: #64748b;">Jawab 12 soalan rawak (1x hingga 12x) untuk kumpul bintang & lencana adiwira!</p>
             <div class="grid-container" id="kuizGrid"></div>
         </div>
 
@@ -667,17 +673,17 @@
 <script>
 /* BADGES DEFINITION (Total 100 Pts) */
 const BADGES = [
-    { id: 'b_s2', title: 'Wira Kebenaran Sifir 2', pts: 8, desc: 'Kuasa Papa Zola Sifir 2 Sempurna', icon: '⚡' },
-    { id: 'b_s3', title: 'Pakar Biskut Sifir 3', pts: 8, desc: 'Kuasa Yaya Sifir 3 Sempurna', icon: '🍪' },
-    { id: 'b_s4', title: 'Juara Makanan Sifir 4', pts: 8, desc: 'Kuasa Gopal Sifir 4 Sempurna', icon: '🍭' },
-    { id: 'b_s5', title: 'BoBoiBoy Elemental 5', pts: 8, desc: 'Kuasa BoBoiBoy Sifir 5 Sempurna', icon: '🔥' },
-    { id: 'b_s6', title: 'Tangkas Kebenaran 6', pts: 9, desc: 'Selesai Kuiz Sifir 6 (12/12)', icon: '🥋' },
-    { id: 'b_s7', title: 'Penjelajah Galaksi 7', pts: 9, desc: 'Selesai Kuiz Sifir 7 (12/12)', icon: '🚀' },
-    { id: 'b_s8', title: 'BoBoiBoy Halilintar 8', pts: 9, desc: 'Selesai Kuiz Sifir 8 (12/12)', icon: '⚡' },
-    { id: 'b_s9', title: 'Bintang Terang 9', pts: 10, desc: 'Selesai Kuiz Sifir 9 (12/12)', icon: '🌟' },
-    { id: 'b_s10', title: 'Raja Kebenaran 10', pts: 8, desc: 'Selesai Kuiz Sifir 10 (12/12)', icon: '🔟' },
-    { id: 'b_s11', title: 'Master Elemental 11', pts: 11, desc: 'Selesai Kuiz Sifir 11 (12/12)', icon: '🌀' },
-    { id: 'b_s12', title: 'Legenda Sifir 12', pts: 12, desc: 'Selesai Kuiz Sifir 12 (12/12)', icon: '👑' },
+    { id: 'b_s2', title: 'Wira Kebenaran Sifir 2', pts: 8, desc: 'Sifir 2 (Sekurang-kurangnya 2 Bintang)', icon: '⚡' },
+    { id: 'b_s3', title: 'Pakar Biskut Sifir 3', pts: 8, desc: 'Sifir 3 (Sekurang-kurangnya 2 Bintang)', icon: '🍪' },
+    { id: 'b_s4', title: 'Juara Makanan Sifir 4', pts: 8, desc: 'Sifir 4 (Sekurang-kurangnya 2 Bintang)', icon: '🍭' },
+    { id: 'b_s5', title: 'BoBoiBoy Elemental 5', pts: 8, desc: 'Sifir 5 (Sekurang-kurangnya 2 Bintang)', icon: '🔥' },
+    { id: 'b_s6', title: 'Tangkas Kebenaran 6', pts: 9, desc: 'Sifir 6 (Sekurang-kurangnya 2 Bintang)', icon: '🥋' },
+    { id: 'b_s7', title: 'Penjelajah Galaksi 7', pts: 9, desc: 'Sifir 7 (Sekurang-kurangnya 2 Bintang)', icon: '🚀' },
+    { id: 'b_s8', title: 'BoBoiBoy Halilintar 8', pts: 9, desc: 'Sifir 8 (Sekurang-kurangnya 2 Bintang)', icon: '⚡' },
+    { id: 'b_s9', title: 'Bintang Terang 9', pts: 10, desc: 'Sifir 9 (Sekurang-kurangnya 2 Bintang)', icon: '🌟' },
+    { id: 'b_s10', title: 'Raja Kebenaran 10', pts: 8, desc: 'Sifir 10 (Sekurang-kurangnya 2 Bintang)', icon: '🔟' },
+    { id: 'b_s11', title: 'Master Elemental 11', pts: 11, desc: 'Sifir 11 (Sekurang-kurangnya 2 Bintang)', icon: '🌀' },
+    { id: 'b_s12', title: 'Legenda Sifir 12', pts: 12, desc: 'Sifir 12 (Sekurang-kurangnya 2 Bintang)', icon: '👑' },
 ];
 const MAX_TOTAL_POINTS = BADGES.reduce((acc, b) => acc + b.pts, 0);
 
@@ -729,8 +735,9 @@ function saveData() {
 function ensureUserData(name) {
     if (!name) return;
     if (!usersData[name]) {
-        usersData[name] = { avatar: 'boboiboy.png', selfRate: {}, parentTick: {}, badges: [] };
+        usersData[name] = { avatar: 'boboiboy.png', selfRate: {}, parentTick: {}, quizStars: {}, badges: [] };
     }
+    if (!usersData[name].quizStars) usersData[name].quizStars = {};
 }
 
 function selectAvatarChoice(file) {
@@ -953,11 +960,23 @@ function showHafalanMenu() {
 function renderKuizGrid() {
     const grid = document.getElementById('kuizGrid');
     grid.innerHTML = '';
+    const uData = usersData[currentUser] || { quizStars: {} };
+
     for (let i = 2; i <= 12; i++) {
+        const starCount = (uData.quizStars && uData.quizStars[i]) ? uData.quizStars[i] : 0;
+        let starTag = '';
+        if (starCount === 3) starTag = '⭐⭐⭐ (Emas)';
+        else if (starCount === 2) starTag = '⭐⭐ (Perak)';
+        else if (starCount === 1) starTag = '⭐ (Gangsa)';
+        else starTag = 'Belum Main';
+
         const card = document.createElement('div');
         card.className = 'card-sifir';
         card.onclick = () => startKuiz(i);
-        card.innerHTML = `<div class="sifir-num">Sifir ${i}</div><div class="badge-status">12 Soalan Rawak</div>`;
+        card.innerHTML = `
+            <div class="sifir-num">Sifir ${i}</div>
+            <div class="stars-display-tag">${starTag}</div>
+        `;
         grid.appendChild(card);
     }
 }
@@ -986,7 +1005,6 @@ function renderQuestion() {
     document.getElementById('quizScoreText').innerText = `Markah: ${activeQuiz.score}`;
     document.getElementById('questionDisplay').innerText = `${q.num1} × ${q.num2} = ?`;
 
-    // Random Dialog
     const speech = SPEECHES[Math.floor(Math.random() * SPEECHES.length)];
     document.getElementById('quizCharSpeech').innerText = speech;
 
@@ -1011,7 +1029,6 @@ function useYayaBiskutPower() {
     const q = activeQuiz.questions[activeQuiz.index];
     const btns = Array.from(document.querySelectorAll('.option-btn'));
     
-    // Hide 2 incorrect buttons
     let removed = 0;
     btns.forEach(b => {
         if (parseInt(b.innerText) !== q.ans && removed < 2) {
@@ -1056,20 +1073,44 @@ function finishKuiz() {
     document.getElementById('viewKuizPlay').classList.add('hidden');
     document.getElementById('viewKuizResult').classList.remove('hidden');
 
-    document.getElementById('resultScoreText').innerText = `Anda menjawab ${activeQuiz.score}/12 betul!`;
+    const finalScore = activeQuiz.score;
+    let earnedStars = 0;
+    if (finalScore === 12) earnedStars = 3;
+    else if (finalScore >= 10) earnedStars = 2;
+    else if (finalScore >= 8) earnedStars = 1;
+
+    let starStr = '';
+    for (let i = 0; i < 3; i++) {
+        starStr += (i < earnedStars) ? '⭐' : '☆';
+    }
+    document.getElementById('resultStarsDisplay').innerText = starStr || '☆';
+    document.getElementById('resultScoreText').innerText = `Anda menjawab ${finalScore}/12 betul!`;
     
+    ensureUserData(currentUser);
+    if (!usersData[currentUser].quizStars) usersData[currentUser].quizStars = {};
+    const prevStars = usersData[currentUser].quizStars[activeQuiz.num] || 0;
+    
+    if (earnedStars > prevStars) {
+        usersData[currentUser].quizStars[activeQuiz.num] = earnedStars;
+    }
+
+    // Lencana dibuka jika dapat sekurang-kurangnya 2 Bintang (10/12 ke atas)
     let unlockedText = '';
-    if (activeQuiz.score === 12) {
-        ensureUserData(currentUser);
+    if (earnedStars >= 2) {
         if (!usersData[currentUser].badges) usersData[currentUser].badges = [];
         const badgeId = `b_s${activeQuiz.num}`;
         if (!usersData[currentUser].badges.includes(badgeId)) {
             usersData[currentUser].badges.push(badgeId);
-            saveData();
             unlockedText = `🎉 TAHNIAH! Anda membuka Lencana Sifir ${activeQuiz.num}!`;
             if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
+        } else {
+            unlockedText = `⭐ Tahniah! Rekod Bintang Sifir ${activeQuiz.num} anda telah dikemas kini!`;
         }
+    } else {
+        unlockedText = `Cuba lagi untuk sekurang-kurangnya 10/12 betul (2 Bintang) bagi mendapat Lencana!`;
     }
+
+    saveData();
     document.getElementById('badgeUnlockedText').innerText = unlockedText;
 }
 
