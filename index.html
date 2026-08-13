@@ -454,6 +454,27 @@
             flex-shrink: 0;
         }
 
+        .btn-reset-data {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 2px dashed #fca5a5;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-reset-data:hover {
+            background: #fca5a5;
+            color: #991b1b;
+        }
+
         /* MODALS */
         .modal-overlay {
             position: fixed;
@@ -659,6 +680,14 @@
                 <h3 style="margin-bottom: 12px; color: #334155;" data-i18n="senaraiPemain">Kedudukan Pemain (Peranti Ini)</h3>
                 <div class="leaderboard-list" id="leaderboardContainer"></div>
             </div>
+
+            <!-- RESET DATA BUTTON -->
+            <div style="text-align: center;">
+                <button class="btn-reset-data" onclick="confirmResetAllData()">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span data-i18n="resetData">Reset Semua Data App</span>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -670,8 +699,13 @@
         <h2 style="color: #1e293b; margin-bottom: 8px;" data-i18n="pilihNama">Siapa Yang Bermain?</h2>
         <p style="color: #64748b; font-size: 14px;" data-i18n="subPilihNama">Masukkan nama anda untuk menyimpan rekod & bintang!</p>
         
-        <input type="text" id="usernameInput" class="user-input" placeholder="Nama Contoh: Danial" maxlength="12">
+        <input type="text" id="usernameInput" class="user-input" placeholder="Nama Contoh: Fawwaz" maxlength="12">
         <button class="btn-submit" onclick="saveUserSelection()" data-i18n="mulaBermain">Mula Bermain!</button>
+        
+        <button class="btn-reset-data" onclick="confirmResetAllData()" style="margin-top: 20px;">
+            <i class="fa-solid fa-trash-can"></i>
+            <span data-i18n="resetData">Reset Semua Data</span>
+        </button>
     </div>
 </div>
 
@@ -716,7 +750,8 @@ const i18n = {
         batal: "Batal",
         kembali: "Kembali",
         mintaPengesahan: "Minta Pengesahan Ibu Bapa",
-        mainKuizSekarang: "Main Kuiz Sekarang! 🚀"
+        mainKuizSekarang: "Main Kuiz Sekarang! 🚀",
+        resetData: "Reset Semua Data App"
     },
     en: {
         rajaSifir: "Sifir King",
@@ -742,7 +777,8 @@ const i18n = {
         batal: "Cancel",
         kembali: "Back",
         mintaPengesahan: "Request Parent Check",
-        mainKuizSekarang: "Start Quiz Now! 🚀"
+        mainKuizSekarang: "Start Quiz Now! 🚀",
+        resetData: "Reset All App Data"
     }
 };
 
@@ -760,7 +796,7 @@ const BADGES_DEFINITIONS = [
 ];
 
 /* --- STATE --- */
-let currentUser = "Danial";
+let currentUser = "Fawwaz";
 let usersData = {}; 
 let activeSifir = 1;
 let activeQuiz = { sifirNum: 1, questions: [], currentIndex: 0, score: 0, streak: 0, maxStreak: 0 };
@@ -797,6 +833,21 @@ function ensureUserDataStructure(username) {
         usersData[username] = { stars: {}, verified: {}, badges: [], totalScore: 0 };
     }
     if (!usersData[username].verified) usersData[username].verified = {};
+}
+
+function confirmResetAllData() {
+    const isConfirmed = confirm(
+        currentLang === 'ms' 
+        ? "ADAKAH ANDA PASTI?\n\nTindakan ini akan MEMADAM SEMUA rekod pemain, bintang, lencana, dan kunci pengesahan pada peranti ini!" 
+        : "ARE YOU SURE?\n\nThis will ERASE ALL player records, stars, badges, and unlock statuses on this device!"
+    );
+
+    if (isConfirmed) {
+        localStorage.removeItem('raja_sifir_pwa_data');
+        localStorage.removeItem('raja_sifir_last_user');
+        alert(currentLang === 'ms' ? "Semua data telah berjaya dipadam!" : "All data has been reset successfully!");
+        window.location.reload();
+    }
 }
 
 function openUserModal() {
