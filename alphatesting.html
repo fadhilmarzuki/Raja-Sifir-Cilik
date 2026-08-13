@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Raja Sifir Cilik - Edisi BoBoiBoy</title>
+
+    <!-- Meta Tag PWA & Tema -->
+    <meta name="theme-color" content="#ff9f43">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Raja Sifir">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service Worker PWA Registered:', reg.scope))
+            .catch(err => console.log('Service Worker Failed:', err));
+        });
+      }
+    </script>
+    
+    <style>
+        :root {
+            --primary-orange: #ff9f43;
+            --font-title: 'Comfortaa', cursive;
+            --font-body: 'Fredoka', sans-serif;
+            --color-green: #2ecc71;
+            --color-blue: #3b82f6;
+            --color-purple: #9b51e0;
+            --color-yellow: #f1c40f;
+            --color-red: #ff6b6b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-body);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffeaa7 0%, #ff9f43 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            color: #2c3e50;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 920px;
+            min-height: 720px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Navigation Header */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: #ffffff;
+            border-bottom: 4px solid #f0f3f8;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, #ffeaa7, #fdcb6e);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(253, 203, 110, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .user-avatar-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            background: #fff;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-nav {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .btn-nav.active {
+            background: var(--primary-orange);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 159, 67, 0.4);
+        }
+
+        .view-content {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Grid Sifir */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 16px;
+        }
+
+        .card-sifir {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            border: 3px solid #e2e8f0;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .card-sifir:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary-orange);
+        }
+
+        .card-sifir .sifir-num {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .card-sifir .badge-status {
+            font-size: 12px;
+            margin-top: 6px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .card-sifir .badge-status.checked {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        /* Hafalan Page */
+        .hafalan-box {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border: 3px solid #ffeaa7;
+            text-align: center;
+        }
+
+        .hafalan-row {
+            font-size: 22px;
+            font-weight: 700;
+            padding: 8px 0;
+            color: #334155;
+            border-bottom: 2px dashed #f1f5f9;
+        }
+
+        .star-rating-self {
+            font-size: 28px;
+            color: #cbd5e1;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .star-rating-self .selected {
+            color: #f1c40f;
+        }
+
+        /* Quiz Page & Character Companion */
+        .character-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            padding: 10px 18px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .character-box img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .character-speech {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .quiz-card {
+            background: white;
+            border: 4px solid var(--primary-orange);
+            border-radius: 32px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(255, 159, 67, 0.2);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .question-text { font-size: 52px; font-weight: 700; color: #1e293b; }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 3px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 18px;
+            font-size: 30px;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            box-shadow: 0 6px 0px #cbd5e1;
+            transition: all 0.15s ease;
+        }
+
+        .option-btn.correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #15803d !important; }
+        .option-btn.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+
+        .btn-powerup {
+            background: linear-gradient(45deg, #ec4899, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3);
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-powerup:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #cbd5e1;
+            box-shadow: none;
+        }
+
+        /* Dashboard & Badges */
+        .progress-bar-overall {
+            width: 100%;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .progress-fill-overall {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 2px;
+            font-weight: 700;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            width: 100%;
+        }
+
+        .badge-card {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 2px solid #f1f5f9;
+        }
+
+        .badge-card.locked { opacity: 0.45; filter: grayscale(90%); }
+
+        /* Sijil Template */
+        .sijil-container {
+            background: #fff;
+            border: 10px double #d97706;
+            border-radius: 24px;
+            padding: 40px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .sijil-title { font-family: var(--font-title); font-size: 30px; color: #d97706; margin-bottom: 10px; }
+        .sijil-name { font-size: 36px; font-weight: 700; color: #1e293b; border-bottom: 2px solid #cbd5e1; display: inline-block; padding: 0 20px; margin: 15px 0; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+        }
+
+        .modal-card {
+            background: white; border-radius: 32px; padding: 28px; width: 100%; max-width: 440px; text-align: center; max-height: 90vh; overflow-y: auto;
+        }
+
+        .avatar-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #e2e8f0;
+            cursor: pointer;
+            object-fit: cover;
+            padding: 4px;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary-orange);
+            background: #ffedd5;
+            transform: scale(1.1);
+        }
+
+        .user-list-container {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .user-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 8px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+
+        .user-item-row.active {
+            border-color: var(--primary-orange);
+            background: #ffedd5;
+            font-weight: 700;
+        }
+
+        .btn-delete-user {
+            color: #ef4444; background: none; border: none; padding: 4px 8px; font-size: 14px; cursor: pointer;
+        }
+
+        .input-custom {
+            width: 100%; padding: 12px 16px; border-radius: 16px; border: 2px solid #cbd5e1; font-size: 16px; text-align: center; margin: 8px 0; outline: none;
+        }
+
+        .btn-action {
+            width: 100%; padding: 14px; background: var(--primary-orange); color: white; border: none; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer;
+        }
+
+        .btn-reset-all {
+            background: #fee2e2; color: #dc2626; border: 2px dashed #fca5a5; padding: 8px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 12px; font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .question-text { font-size: 38px; }
+            .option-btn { font-size: 24px; padding: 12px; }
+            .sijil-title { font-size: 22px; }
+            .sijil-name { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Header Bar -->
+    <div class="header-bar">
+        <div class="user-pill" onclick="openUserModal()">
+            <img src="boboiboy.png" id="headerAvatarImg" class="user-avatar-img" alt="Avatar" onerror="this.src='boboiboy.png'">
+            <span id="currentUserName">Danial</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 12px; margin-left: 2px; opacity: 0.6;"></i>
+        </div>
+
+        <div class="nav-menu">
+            <button class="btn-nav active" id="navHafalan" onclick="switchTab('hafalan')">
+                <i class="fa-solid fa-book-open"></i> Hafalan
+            </button>
+            <button class="btn-nav" id="navKuiz" onclick="switchTab('kuiz')">
+                <i class="fa-solid fa-gamepad"></i> Kuiz Sifir
+            </button>
+            <button class="btn-nav" id="navDash" onclick="switchTab('dash')">
+                <i class="fa-solid fa-trophy"></i> Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN VIEWS -->
+    <div class="view-content">
+
+        <!-- VIEW 1: HAFALAN & SEMAKAN IBU BAPA -->
+        <div id="viewHafalanMenu" style="width:100%; text-align:center;">
+            <h1 style="font-family: var(--font-title); color: #d97706;">Bilik Hafalan Sifir 📚</h1>
+            <p style="color: #64748b;">Pilih sifir untuk menghafal & dapatkan tanda semak (Tick ✅) Ibu Bapa!</p>
+            <div class="grid-container" id="hafalanGrid"></div>
+        </div>
+
+        <!-- VIEW HAFALAN DETAIL -->
+        <div id="viewHafalanDetail" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <h2 id="hafalanTitle" style="font-size: 28px; color: #d97706; margin-bottom: 12px;">Sifir 2</h2>
+            <div class="hafalan-box">
+                <div id="hafalanList"></div>
+                
+                <hr style="margin: 15px 0; border: none; border-top: 2px dashed #f1f5f9;">
+                
+                <p style="font-size: 14px; color: #64748b;">Penilaian Sendiri (Self-Rate):</p>
+                <div class="star-rating-self" id="starRatingSelf">
+                    <span onclick="rateSelf(1)">★</span>
+                    <span onclick="rateSelf(2)">★</span>
+                    <span onclick="rateSelf(3)">★</span>
+                </div>
+
+                <div style="margin-top: 15px; background: #f8fafc; padding: 12px; border-radius: 16px;">
+                    <p style="font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 8px;">Semakan Ibu Bapa:</p>
+                    <button id="btnParentTick" onclick="toggleParentTick()" style="padding: 10px 20px; border-radius: 16px; border: none; font-weight: 700; cursor: pointer; background: #e2e8f0; color: #475569;">
+                        Belum Disemak ❌
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn-nav" onclick="showHafalanMenu()" style="margin-top: 20px; background: #cbd5e1;">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Senarai Hafalan
+            </button>
+        </div>
+
+        <!-- VIEW 2: KUIZ MENU -->
+        <div id="viewKuizMenu" class="hidden" style="width:100%; text-align:center;">
+            <h1 style="font-family: var(--font-title); color: #d97706;">Cabaran Kuiz Sifir 🎯</h1>
+            <p style="color: #64748b;">Jawab 12 soalan rawak ($1\times$ hingga $12\times$) untuk kumpul lencana adiwira!</p>
+            <div class="grid-container" id="kuizGrid"></div>
+        </div>
+
+        <!-- VIEW KUIZ PLAY -->
+        <div id="viewKuizPlay" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            
+            <!-- Character Speech Box -->
+            <div class="character-box">
+                <img src="boboiboy.png" id="quizCharImg" alt="Character" onerror="this.src='boboiboy.png'">
+                <div>
+                    <div class="character-speech" id="quizCharSpeech">"Teruskan usaha! Kebenaran menyebelahi kamu!"</div>
+                    <button class="btn-powerup" id="btnPowerupYaya" onclick="useYayaBiskutPower()">
+                        🍪 Kuasa Biskut Yaya (50/50)
+                    </button>
+                </div>
+            </div>
+
+            <div style="width: 100%; max-width: 500px; display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700;">
+                <span id="quizProgressText" style="color: #3b82f6;">Soalan 1/12</span>
+                <span id="quizScoreText" style="color: #2ecc71;">Markah: 0</span>
+            </div>
+
+            <div class="quiz-card">
+                <div class="question-text" id="questionDisplay">2 × 3 = ?</div>
+            </div>
+
+            <div class="answers-grid" id="answersGrid"></div>
+        </div>
+
+        <!-- VIEW KUIZ RESULT -->
+        <div id="viewKuizResult" class="hidden" style="width:100%; text-align:center;">
+            <div class="modal-card" style="max-width: 450px; margin: 0 auto;">
+                <img src="papazola.png" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px;" onerror="this.src='boboiboy.png'">
+                <h2 style="font-size: 26px; color: var(--primary-orange);">Kebenaran Menyebelahi Kamu!</h2>
+                <div style="font-size: 45px; color: #f1c40f; margin: 10px 0;" id="resultStarsDisplay">⭐⭐⭐</div>
+                <p style="font-size: 18px; color: #475569;" id="resultScoreText">Anda menjawab 12/12 betul!</p>
+                <p style="font-size: 15px; color: #16a34a; font-weight: 700; margin: 15px 0;" id="badgeUnlockedText"></p>
+
+                <button class="btn-action" onclick="switchTab('kuiz')">Selesai & Kembali</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: DASHBOARD & CARTA PEMAIN -->
+        <div id="viewDashboard" class="hidden" style="width:100%; max-width: 800px;">
+            <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center;">
+                <h2>Pencapaian Keseluruhan Raja Sifir Cilik</h2>
+                <p style="color: #64748b; font-size: 14px;">Kumpul poin lencana untuk capai markah perseratus (95% ke atas untuk dapat Sijil!)</p>
+                
+                <div class="progress-bar-overall">
+                    <div class="progress-fill-overall" id="overallProgressBar"></div>
+                    <div class="progress-text" id="overallProgressText">0%</div>
+                </div>
+
+                <button id="btnClaimSijil" class="btn-action" onclick="showSijilView()" style="background: #d97706; display: none; margin-top: 10px;">
+                    📜 Buka Sijil Raja Sifir Cilik
+                </button>
+            </div>
+
+            <h3 style="margin-bottom: 12px; color: #334155;">Koleksi Lencana Adiwira</h3>
+            <div class="badges-grid" id="badgesContainer" style="margin-bottom: 24px;"></div>
+
+            <h3 style="margin-bottom: 12px; color: #334155;">Carta Kedudukan Pemain</h3>
+            <div style="background: white; border-radius: 20px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);" id="leaderboardList"></div>
+        </div>
+
+        <!-- VIEW 4: SIJIL -->
+        <div id="viewSijil" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <div class="sijil-container">
+                <div style="font-size: 50px; margin-bottom: 10px;">⚡</div>
+                <div class="sijil-title">SIJIL PENGUKURAN RAJA SIFIR CILIK</div>
+                <p style="color: #64748b;">Dengan ini diperakui bahawa</p>
+                <div class="sijil-name" id="sijilUserName">Danial</div>
+                <p style="color: #475569; font-size: 18px; margin-top: 10px;">telah berjaya menguasai Hafalan & Kuiz Sifir 2 hingga 12 dengan pencapaian cemerlang <strong><span id="sijilScorePct">95</span>%</strong>!</p>
+                <div style="margin-top: 30px; display: flex; justify-content: space-around; align-items: flex-end;">
+                    <div>
+                        <div style="border-bottom: 2px solid #334155; width: 120px; margin: 0 auto;"></div>
+                        <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Tarikh Sah</p>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; color: #d97706;">⚡</div>
+                        <p style="font-size: 12px; font-weight: 700; color: #d97706;">Raja Sifir Cilik</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn-action" onclick="window.print()" style="background: #2ecc71;">🖨️ Cetak / Simpan Sijil</button>
+                <button class="btn-nav" onclick="switchTab('dash')">Kembali</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal User Switcher & Avatar Selector -->
+<div class="modal-overlay hidden" id="userModal">
+    <div class="modal-card">
+        <h2 style="color: #1e293b; margin-bottom: 4px;">Pilih Pemain & Avatar</h2>
+        <p style="color: #64748b; font-size: 13px;">Pilih watak & nama anda:</p>
+
+        <!-- Avatar Selection -->
+        <div class="avatar-selector">
+            <img src="boboiboy.png" class="avatar-option selected" id="av_boboiboy" onclick="selectAvatarChoice('boboiboy.png')" alt="BoBoiBoy" onerror="this.src='boboiboy.png'">
+            <img src="yaya.png" class="avatar-option" id="av_yaya" onclick="selectAvatarChoice('yaya.png')" alt="Yaya" onerror="this.src='boboiboy.png'">
+            <img src="gopal.png" class="avatar-option" id="av_gopal" onclick="selectAvatarChoice('gopal.png')" alt="Gopal" onerror="this.src='boboiboy.png'">
+            <img src="papazola.png" class="avatar-option" id="av_papazola" onclick="selectAvatarChoice('papazola.png')" alt="Papa Zola" onerror="this.src='boboiboy.png'">
+        </div>
+        
+        <!-- Senarai Pemain Sedia Ada -->
+        <div class="user-list-container" id="userListContainer"></div>
+
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed #e2e8f0;">
+
+        <!-- Tambah Pemain Baharu -->
+        <p style="font-size: 13px; font-weight: 700; color: #475569; text-align: left;">+ Tambah Pemain Baharu:</p>
+        <input type="text" id="usernameInput" class="input-custom" placeholder="Taip Nama Baharu..." maxlength="12">
+        
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn-action" onclick="addNewUser()">Tambah & Main</button>
+            <button class="btn-nav" onclick="closeUserModal()" style="padding: 12px;">Batal</button>
+        </div>
+
+        <button class="btn-reset-all" onclick="confirmResetAllData()">
+            🗑️ Padam SEMUA Nama & Data
+        </button>
+    </div>
+</div>
+
+<script>
+/* BADGES DEFINITION (Total 100 Pts) */
+const BADGES = [
+    { id: 'b_s2', title: 'Wira Kebenaran Sifir 2', pts: 8, desc: 'Kuasa Papa Zola Sifir 2 Sempurna', icon: '⚡' },
+    { id: 'b_s3', title: 'Pakar Biskut Sifir 3', pts: 8, desc: 'Kuasa Yaya Sifir 3 Sempurna', icon: '🍪' },
+    { id: 'b_s4', title: 'Juara Makanan Sifir 4', pts: 8, desc: 'Kuasa Gopal Sifir 4 Sempurna', icon: '🍭' },
+    { id: 'b_s5', title: 'BoBoiBoy Elemental 5', pts: 8, desc: 'Kuasa BoBoiBoy Sifir 5 Sempurna', icon: '🔥' },
+    { id: 'b_s6', title: 'Tangkas Kebenaran 6', pts: 9, desc: 'Selesai Kuiz Sifir 6 (12/12)', icon: '🥋' },
+    { id: 'b_s7', title: 'Penjelajah Galaksi 7', pts: 9, desc: 'Selesai Kuiz Sifir 7 (12/12)', icon: '🚀' },
+    { id: 'b_s8', title: 'BoBoiBoy Halilintar 8', pts: 9, desc: 'Selesai Kuiz Sifir 8 (12/12)', icon: '⚡' },
+    { id: 'b_s9', title: 'Bintang Terang 9', pts: 10, desc: 'Selesai Kuiz Sifir 9 (12/12)', icon: '🌟' },
+    { id: 'b_s10', title: 'Raja Kebenaran 10', pts: 8, desc: 'Selesai Kuiz Sifir 10 (12/12)', icon: '🔟' },
+    { id: 'b_s11', title: 'Master Elemental 11', pts: 11, desc: 'Selesai Kuiz Sifir 11 (12/12)', icon: '🌀' },
+    { id: 'b_s12', title: 'Legenda Sifir 12', pts: 12, desc: 'Selesai Kuiz Sifir 12 (12/12)', icon: '👑' },
+];
+const MAX_TOTAL_POINTS = BADGES.reduce((acc, b) => acc + b.pts, 0);
+
+const SPEECHES = [
+    '"Kebenaran menyebelahi kamu!" - Papa Zola',
+    '"Biskut Yaya beri kamu tenaga!" - Yaya',
+    '"Tukar soalan ni jadi gula-gula!" - Gopal',
+    '"BoBoiBoy Kuasa Tiga!" - BoBoiBoy',
+    '"Fokus! Kebenaran tak pernah menyerah!" - Papa Zola'
+];
+
+/* APP STATE */
+let currentUser = "";
+let selectedAvatarFile = "boboiboy.png";
+let usersData = {};
+let activeHafalanNum = 2;
+let activeQuiz = { num: 2, questions: [], index: 0, score: 0, usedPowerup: false };
+
+window.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    renderHafalanGrid();
+    renderKuizGrid();
+    if (!currentUser || Object.keys(usersData).length === 0) {
+        openUserModal();
+    } else {
+        updateProfileUI();
+    }
+});
+
+function loadData() {
+    const saved = localStorage.getItem('raja_sifir_v4_data');
+    if (saved) {
+        try { usersData = JSON.parse(saved); } catch(e) { usersData = {}; }
+    }
+    const last = localStorage.getItem('raja_sifir_v4_lastuser');
+    if (last && usersData[last]) {
+        currentUser = last;
+    } else if (Object.keys(usersData).length > 0) {
+        currentUser = Object.keys(usersData)[0];
+    }
+    ensureUserData(currentUser);
+}
+
+function saveData() {
+    localStorage.setItem('raja_sifir_v4_data', JSON.stringify(usersData));
+    if (currentUser) localStorage.setItem('raja_sifir_v4_lastuser', currentUser);
+}
+
+function ensureUserData(name) {
+    if (!name) return;
+    if (!usersData[name]) {
+        usersData[name] = { avatar: 'boboiboy.png', selfRate: {}, parentTick: {}, badges: [] };
+    }
+}
+
+function selectAvatarChoice(file) {
+    selectedAvatarFile = file;
+    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+    if(file.includes('boboiboy')) document.getElementById('av_boboiboy').classList.add('selected');
+    if(file.includes('yaya')) document.getElementById('av_yaya').classList.add('selected');
+    if(file.includes('gopal')) document.getElementById('av_gopal').classList.add('selected');
+    if(file.includes('papazola')) document.getElementById('av_papazola').classList.add('selected');
+
+    if (currentUser && usersData[currentUser]) {
+        usersData[currentUser].avatar = file;
+        saveData();
+        updateProfileUI();
+    }
+}
+
+/* USER MANAGER MODAL LOGIC */
+function openUserModal() {
+    renderUserList();
+    document.getElementById('usernameInput').value = '';
+    document.getElementById('userModal').classList.remove('hidden');
+}
+
+function closeUserModal() {
+    if (!currentUser) return;
+    document.getElementById('userModal').classList.add('hidden');
+}
+
+function renderUserList() {
+    const container = document.getElementById('userListContainer');
+    container.innerHTML = '';
+    const allUsers = Object.keys(usersData);
+
+    if (allUsers.length === 0) {
+        container.innerHTML = `<p style="font-size: 13px; color: #94a3b8;">Tiada pemain didaftarkan lagi.</p>`;
+        return;
+    }
+
+    allUsers.forEach(name => {
+        const uAvatar = usersData[name].avatar || 'boboiboy.png';
+        const row = document.createElement('div');
+        row.className = `user-item-row ${name === currentUser ? 'active' : ''}`;
+        row.onclick = () => selectUser(name);
+        
+        row.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${uAvatar}" style="width:28px; height:28px; border-radius:50%; object-fit:cover;" onerror="this.src='boboiboy.png'">
+                <span>${name}</span>
+            </div>
+            <button class="btn-delete-user" onclick="event.stopPropagation(); deleteSingleUser('${name}')">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        `;
+        container.appendChild(row);
+    });
+}
+
+function selectUser(name) {
+    currentUser = name;
+    selectedAvatarFile = usersData[name].avatar || 'boboiboy.png';
+    selectAvatarChoice(selectedAvatarFile);
+    saveData();
+    updateProfileUI();
+    closeUserModal();
+    renderHafalanGrid();
+    renderKuizGrid();
+    if (!document.getElementById('viewDashboard').classList.contains('hidden')) {
+        renderDashboard();
+    }
+}
+
+function addNewUser() {
+    const input = document.getElementById('usernameInput').value.trim();
+    if (!input) return;
+
+    currentUser = input;
+    ensureUserData(currentUser);
+    usersData[currentUser].avatar = selectedAvatarFile;
+    saveData();
+    updateProfileUI();
+    closeUserModal();
+    renderHafalanGrid();
+    renderKuizGrid();
+}
+
+function deleteSingleUser(name) {
+    if (confirm(`Adakah anda pasti mahu memadam nama "${name}"?`)) {
+        delete usersData[name];
+        if (currentUser === name) {
+            const remaining = Object.keys(usersData);
+            currentUser = remaining.length > 0 ? remaining[0] : "";
+        }
+        saveData();
+        updateProfileUI();
+        renderUserList();
+        renderHafalanGrid();
+        renderKuizGrid();
+    }
+}
+
+function confirmResetAllData() {
+    if (confirm("ADAKAH ANDA PASTI?\n\nTindakan ini akan MEMADAM SEMUA NAMA PEMAIN dan rekod!")) {
+        localStorage.removeItem('raja_sifir_v4_data');
+        localStorage.removeItem('raja_sifir_v4_lastuser');
+        usersData = {};
+        currentUser = "";
+        alert("Semua data telah dipadam.");
+        window.location.reload();
+    }
+}
+
+function updateProfileUI() {
+    document.getElementById('currentUserName').innerText = currentUser || "Pilih Pemain";
+    const av = (usersData[currentUser] && usersData[currentUser].avatar) ? usersData[currentUser].avatar : 'boboiboy.png';
+    document.getElementById('headerAvatarImg').src = av;
+}
+
+function switchTab(tab) {
+    ['viewHafalanMenu', 'viewHafalanDetail', 'viewKuizMenu', 'viewKuizPlay', 'viewKuizResult', 'viewDashboard', 'viewSijil'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+
+    ['navHafalan', 'navKuiz', 'navDash'].forEach(id => document.getElementById(id).classList.remove('active'));
+
+    if (tab === 'hafalan') {
+        document.getElementById('viewHafalanMenu').classList.remove('hidden');
+        document.getElementById('navHafalan').classList.add('active');
+        renderHafalanGrid();
+    } else if (tab === 'kuiz') {
+        document.getElementById('viewKuizMenu').classList.remove('hidden');
+        document.getElementById('navKuiz').classList.add('active');
+        renderKuizGrid();
+    } else if (tab === 'dash') {
+        document.getElementById('viewDashboard').classList.remove('hidden');
+        document.getElementById('navDash').classList.add('active');
+        renderDashboard();
+    }
+}
+
+/* HAFALAN MODULE */
+function renderHafalanGrid() {
+    const grid = document.getElementById('hafalanGrid');
+    grid.innerHTML = '';
+    const uData = usersData[currentUser] || { parentTick: {} };
+
+    for (let i = 2; i <= 12; i++) {
+        const isChecked = uData.parentTick ? (uData.parentTick[i] || false) : false;
+        const card = document.createElement('div');
+        card.className = 'card-sifir';
+        card.onclick = () => openHafalanDetail(i);
+        card.innerHTML = `
+            <div class="sifir-num">Sifir ${i}</div>
+            <div class="badge-status ${isChecked ? 'checked' : ''}">${isChecked ? 'Disemak ✅' : 'Belum Semak'}</div>
+        `;
+        grid.appendChild(card);
+    }
+}
+
+function openHafalanDetail(num) {
+    activeHafalanNum = num;
+    document.getElementById('viewHafalanMenu').classList.add('hidden');
+    document.getElementById('viewHafalanDetail').classList.remove('hidden');
+    document.getElementById('hafalanTitle').innerText = `Sifir ${num}`;
+
+    const list = document.getElementById('hafalanList');
+    list.innerHTML = '';
+    for (let i = 1; i <= 12; i++) {
+        list.innerHTML += `<div class="hafalan-row">${num} × ${i} = ${num * i}</div>`;
+    }
+    updateHafalanUI();
+}
+
+function updateHafalanUI() {
+    const uData = usersData[currentUser] || { selfRate: {}, parentTick: {} };
+    const rate = uData.selfRate ? (uData.selfRate[activeHafalanNum] || 0) : 0;
+    const isTick = uData.parentTick ? (uData.parentTick[activeHafalanNum] || false) : false;
+
+    const stars = document.getElementById('starRatingSelf').children;
+    for (let i = 0; i < 3; i++) {
+        stars[i].className = (i < rate) ? 'selected' : '';
+    }
+
+    const btn = document.getElementById('btnParentTick');
+    if (isTick) {
+        btn.innerText = 'Disemak Ibu Bapa ✅';
+        btn.style.background = '#dcfce7';
+        btn.style.color = '#15803d';
+    } else {
+        btn.innerText = 'Belum Disemak ❌';
+        btn.style.background = '#fee2e2';
+        btn.style.color = '#b91c1c';
+    }
+}
+
+function rateSelf(stars) {
+    ensureUserData(currentUser);
+    if (!usersData[currentUser].selfRate) usersData[currentUser].selfRate = {};
+    usersData[currentUser].selfRate[activeHafalanNum] = stars;
+    saveData();
+    updateHafalanUI();
+}
+
+function toggleParentTick() {
+    ensureUserData(currentUser);
+    if (!usersData[currentUser].parentTick) usersData[currentUser].parentTick = {};
+    const curr = usersData[currentUser].parentTick[activeHafalanNum] || false;
+    usersData[currentUser].parentTick[activeHafalanNum] = !curr;
+    saveData();
+    updateHafalanUI();
+}
+
+function showHafalanMenu() {
+    document.getElementById('viewHafalanDetail').classList.add('hidden');
+    document.getElementById('viewHafalanMenu').classList.remove('hidden');
+    renderHafalanGrid();
+}
+
+/* KUIZ MODULE & CHARACTER POWER-UP */
+function renderKuizGrid() {
+    const grid = document.getElementById('kuizGrid');
+    grid.innerHTML = '';
+    for (let i = 2; i <= 12; i++) {
+        const card = document.createElement('div');
+        card.className = 'card-sifir';
+        card.onclick = () => startKuiz(i);
+        card.innerHTML = `<div class="sifir-num">Sifir ${i}</div><div class="badge-status">12 Soalan Rawak</div>`;
+        grid.appendChild(card);
+    }
+}
+
+function startKuiz(sifirNum) {
+    activeQuiz.num = sifirNum;
+    activeQuiz.score = 0;
+    activeQuiz.index = 0;
+    activeQuiz.usedPowerup = false;
+
+    let multipliers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].sort(() => Math.random() - 0.5);
+    activeQuiz.questions = multipliers.map(m => ({ num1: sifirNum, num2: m, ans: sifirNum * m }));
+
+    const av = (usersData[currentUser] && usersData[currentUser].avatar) ? usersData[currentUser].avatar : 'boboiboy.png';
+    document.getElementById('quizCharImg').src = av;
+    document.getElementById('btnPowerupYaya').disabled = false;
+
+    document.getElementById('viewKuizMenu').classList.add('hidden');
+    document.getElementById('viewKuizPlay').classList.remove('hidden');
+    renderQuestion();
+}
+
+function renderQuestion() {
+    const q = activeQuiz.questions[activeQuiz.index];
+    document.getElementById('quizProgressText').innerText = `Soalan ${activeQuiz.index + 1}/12`;
+    document.getElementById('quizScoreText').innerText = `Markah: ${activeQuiz.score}`;
+    document.getElementById('questionDisplay').innerText = `${q.num1} × ${q.num2} = ?`;
+
+    // Random Dialog
+    const speech = SPEECHES[Math.floor(Math.random() * SPEECHES.length)];
+    document.getElementById('quizCharSpeech').innerText = speech;
+
+    const grid = document.getElementById('answersGrid');
+    grid.innerHTML = '';
+
+    const choices = generateChoices(q.ans);
+    choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = c;
+        btn.onclick = () => handleAnswer(c, q.ans, btn);
+        grid.appendChild(btn);
+    });
+}
+
+function useYayaBiskutPower() {
+    if (activeQuiz.usedPowerup) return;
+    activeQuiz.usedPowerup = true;
+    document.getElementById('btnPowerupYaya').disabled = true;
+
+    const q = activeQuiz.questions[activeQuiz.index];
+    const btns = Array.from(document.querySelectorAll('.option-btn'));
+    
+    // Hide 2 incorrect buttons
+    let removed = 0;
+    btns.forEach(b => {
+        if (parseInt(b.innerText) !== q.ans && removed < 2) {
+            b.style.visibility = 'hidden';
+            removed++;
+        }
+    });
+
+    document.getElementById('quizCharSpeech').innerText = '"Biskut Yaya membantu! Dua pilihan salah telah dihilangkan!"';
+}
+
+function generateChoices(correct) {
+    let set = new Set([correct]);
+    while (set.size < 4) {
+        let offset = (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? 1 : -1);
+        let val = correct + offset;
+        if (val > 0 && val !== correct) set.add(val);
+    }
+    return Array.from(set).sort(() => Math.random() - 0.5);
+}
+
+function handleAnswer(selected, correct, btn) {
+    const btns = document.querySelectorAll('.option-btn');
+    btns.forEach(b => b.disabled = true);
+
+    if (selected === correct) {
+        btn.classList.add('correct');
+        activeQuiz.score += 1;
+    } else {
+        btn.classList.add('wrong');
+        btns.forEach(b => { if (parseInt(b.innerText) === correct) b.classList.add('correct'); });
+    }
+
+    setTimeout(() => {
+        activeQuiz.index++;
+        if (activeQuiz.index < 12) renderQuestion();
+        else finishKuiz();
+    }, 900);
+}
+
+function finishKuiz() {
+    document.getElementById('viewKuizPlay').classList.add('hidden');
+    document.getElementById('viewKuizResult').classList.remove('hidden');
+
+    document.getElementById('resultScoreText').innerText = `Anda menjawab ${activeQuiz.score}/12 betul!`;
+    
+    let unlockedText = '';
+    if (activeQuiz.score === 12) {
+        ensureUserData(currentUser);
+        if (!usersData[currentUser].badges) usersData[currentUser].badges = [];
+        const badgeId = `b_s${activeQuiz.num}`;
+        if (!usersData[currentUser].badges.includes(badgeId)) {
+            usersData[currentUser].badges.push(badgeId);
+            saveData();
+            unlockedText = `🎉 TAHNIAH! Anda membuka Lencana Sifir ${activeQuiz.num}!`;
+            if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 70 });
+        }
+    }
+    document.getElementById('badgeUnlockedText').innerText = unlockedText;
+}
+
+/* DASHBOARD & SIJIL */
+function renderDashboard() {
+    ensureUserData(currentUser);
+    const uData = usersData[currentUser] || { badges: [] };
+
+    let earnedPts = 0;
+    BADGES.forEach(b => {
+        if ((uData.badges || []).includes(b.id)) earnedPts += b.pts;
+    });
+
+    let pct = Math.min(100, Math.round((earnedPts / MAX_TOTAL_POINTS) * 100));
+
+    document.getElementById('overallProgressBar').style.width = pct + '%';
+    document.getElementById('overallProgressText').innerText = `${pct}% Cemerlang`;
+
+    const btnSijil = document.getElementById('btnClaimSijil');
+    if (pct >= 95) {
+        btnSijil.style.display = 'inline-block';
+    } else {
+        btnSijil.style.display = 'none';
+    }
+
+    const bContainer = document.getElementById('badgesContainer');
+    bContainer.innerHTML = '';
+    BADGES.forEach(b => {
+        const isUnlocked = (uData.badges || []).includes(b.id);
+        const card = document.createElement('div');
+        card.className = `badge-card ${isUnlocked ? '' : 'locked'}`;
+        card.innerHTML = `
+            <div style="font-size:32px;">${isUnlocked ? b.icon : '🔒'}</div>
+            <div>
+                <div style="font-weight:700; color:#1e293b;">${b.title} (+${b.pts}%)</div>
+                <div style="font-size:12px; color:#64748b;">${b.desc}</div>
+            </div>
+        `;
+        bContainer.appendChild(card);
+    });
+
+    const lbContainer = document.getElementById('leaderboardList');
+    lbContainer.innerHTML = '';
+
+    let sorted = Object.keys(usersData).map(name => {
+        let pts = 0;
+        (usersData[name].badges || []).forEach(bid => {
+            let found = BADGES.find(b => b.id === bid);
+            if (found) pts += found.pts;
+        });
+        return { name: name, pct: Math.min(100, Math.round((pts / MAX_TOTAL_POINTS) * 100)) };
+    }).sort((a,b) => b.pct - a.pct);
+
+    sorted.forEach((item, index) => {
+        lbContainer.innerHTML += `
+            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f1f5f9;">
+                <div><strong>#${index+1} ${item.name}</strong> ${item.name === currentUser ? '(Anda)' : ''}</div>
+                <div style="font-weight:700; color:#d97706;">${item.pct}% Markah</div>
+            </div>
+        `;
+    });
+}
+
+function showSijilView() {
+    ensureUserData(currentUser);
+    let pts = 0;
+    (usersData[currentUser].badges || []).forEach(bid => {
+        let found = BADGES.find(b => b.id === bid);
+        if (found) pts += found.pts;
+    });
+    let pct = Math.min(100, Math.round((pts / MAX_TOTAL_POINTS) * 100));
+
+    document.getElementById('sijilUserName').innerText = currentUser;
+    document.getElementById('sijilScorePct').innerText = pct;
+
+    ['viewHafalanMenu', 'viewHafalanDetail', 'viewKuizMenu', 'viewKuizPlay', 'viewKuizResult', 'viewDashboard'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+    document.getElementById('viewSijil').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
