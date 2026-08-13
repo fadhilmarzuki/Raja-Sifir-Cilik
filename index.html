@@ -359,7 +359,7 @@
     <div class="header-bar">
         <div class="user-pill" onclick="openUserModal()">
             <i class="fa-solid fa-crown" style="color: #d97706;"></i>
-            <span id="currentUserName">Danial</span>
+            <span id="currentUserName">Fawwaz</span>
             <i class="fa-solid fa-arrows-rotate" style="font-size: 12px; margin-left: 4px; opacity: 0.6;"></i>
         </div>
 
@@ -482,7 +482,7 @@
                 <div style="font-size: 50px; margin-bottom: 10px;">👑</div>
                 <div class="sijil-title">SIJIL PENGUKURAN RAJA SIFIR CILIK</div>
                 <p style="color: #64748b;">Dengan ini diperakui bahawa</p>
-                <div class="sijil-name" id="sijilUserName">Danial</div>
+                <div class="sijil-name" id="sijilUserName">Fawwaz</div>
                 <p style="color: #475569; font-size: 18px; margin-top: 10px;">telah berjaya menguasai Hafalan & Kuiz Sifir 2 hingga 12 dengan pencapaian cemerlang <strong><span id="sijilScorePct">95</span>%</strong>!</p>
                 <div style="margin-top: 30px; display: flex; justify-content: space-around; align-items: flex-end;">
                     <div>
@@ -510,7 +510,7 @@
     <div class="modal-card">
         <h2 style="color: #1e293b; margin-bottom: 8px;">Siapa Yang Bermain?</h2>
         <p style="color: #64748b; font-size: 14px;">Masukkan nama anak untuk rekod profil:</p>
-        <input type="text" id="usernameInput" class="input-custom" placeholder="Contoh: Danial" maxlength="12">
+        <input type="text" id="usernameInput" class="input-custom" placeholder="Contoh: Fawwaz" maxlength="12">
         <button class="btn-action" onclick="saveUserSelection()">Mula Bermain!</button>
     </div>
 </div>
@@ -533,7 +533,7 @@ const BADGES = [
 const MAX_TOTAL_POINTS = BADGES.reduce((acc, b) => acc + b.pts, 0); // Total 100 Pts
 
 /* APP STATE */
-let currentUser = "Danial";
+let currentUser = "Fawwaz";
 let usersData = {};
 let activeHafalanNum = 2;
 let activeQuiz = { num: 2, questions: [], index: 0, score: 0 };
@@ -588,7 +588,7 @@ function saveUserSelection() {
 }
 
 function updateProfileUI() {
-    document.getElementById('currentUserName').innerText = currentUser || "Danial";
+    document.getElementById('currentUserName').innerText = currentUser || "Fawwaz";
 }
 
 function switchTab(tab) {
