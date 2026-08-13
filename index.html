@@ -7,11 +7,16 @@
 
     <!-- Meta Tag PWA & Tema -->
     <meta name="theme-color" content="#ff9f43">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Raja Sifir">
+    
+    <!-- Link PWA & Ikon Khas Telefon -->
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="shortcut icon" href="icon-192.png">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -709,7 +714,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 function checkAndShowInstallModal() {
-    // Hanya tunjuk jika bukan dalam mod standalone (app) & belum pernah tutup
     if (!isStandalone && !localStorage.getItem('raja_sifir_install_prompted')) {
         document.getElementById('installGuideModal').classList.remove('hidden');
     }
